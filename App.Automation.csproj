@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="10.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="ExtentReports" Version="5.0.5-beta1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
+    <PackageReference Include="NUnit" Version="5.0.0-beta.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="4.14.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="NUnit3TestAdapter" Version="6.2.0" />
+    <PackageReference Include="Selenium.Support" Version="4.46.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.46.0" />
+    <PackageReference Include="System.Drawing.Common" Version="11.0.0-preview.6.26359.118" />
+    <PackageReference Include="System.Text.Json" Version="11.0.0-preview.6.26359.118" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="NUnit.Framework" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Config\" />
+    <Folder Include="Modules\Inventory\" />
+    <Folder Include="Modules\Accounting\" />
+    <Folder Include="Modules\Shared\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\Builders\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\DataModels\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\Executors\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\HeaderHandlers\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\LineHandlers\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\TestData\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\Tests\" />
+    <Folder Include="Modules\Purchase\GoodsReceipt\Validators\" />
+    <Folder Include="Modules\Sales\Invoice\TestData\" />
+    <Folder Include="Archieve\" />
+    <Folder Include="TestResults\Html\" />
+    <Folder Include="TestResults\Archive\" />
+    <Folder Include="TestResults\Screenshots\" />
+    <Folder Include="TestResults\Logs\" />
+    <Folder Include="RunSettings\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Config\appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

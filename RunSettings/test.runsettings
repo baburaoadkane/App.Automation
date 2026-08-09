@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  NUnit run settings file.
+  Usage:
+    dotnet test ‐‐settings runsettings/test.runsettings
+    dotnet test ‐‐settings runsettings/test.runsettings ‐‐filter "Category=Smoke"
+    dotnet test ‐‐settings runsettings/test.runsettings ‐‐filter "Category=Sales"
+-->
+<RunSettings>
+
+  <TestRunParameters>
+    <!-- Override environment without changing appsettings.json -->
+    <Parameter name="ERP_ENV"     value="Test" />
+    <Parameter name="Browser"     value="Chrome" />
+    <Parameter name="Headless"    value="false" />
+  </TestRunParameters>
+
+  <NUnit>
+    <!-- Run tests in parallel at class level -->
+    <NumberOfTestWorkers>2</NumberOfTestWorkers>
+    <DefaultTimeout>15000</DefaultTimeout>
+    <StopOnError>false</StopOnError>
+    <ThrowOnEachFailureUnderSetup>false</ThrowOnEachFailureUnderSetup>
+  </NUnit>
+
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <DataCollector friendlyName="Code Coverage" />
+    </DataCollectors>
+  </DataCollectionRunSettings>
+
+</RunSettings>

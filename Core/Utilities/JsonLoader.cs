@@ -1,0 +1,90 @@
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace App.Automation.Core.Utilities
+{
+    public static class JsonLoader
+    {
+        private static readonly JsonSerializerOptions _options = new()
+        {
+            PropertyNameCaseInsensitive = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            ReadCommentHandling = JsonCommentHandling.Skip,
+            AllowTrailingCommas = true
+        };
+
+        // ── Load a single file ─────────────────────────────────────────────────
+
+        /// <summary>
+        /// Deserialize a JSON file into the specified DataModel type.
+        /// Path is relative to the test output directory.
+        /// Throws a clear exception if file not found or JSON is malformed.
+        /// </summary>
+        public static T Load<T>(string relativePath) where T : class
+        {
+            string fullPath = ResolveFullPath(relativePath);
+
+            if (!File.Exists(fullPath))
+                throw new FileNotFoundException(
+                    $"[JsonLoader] Test data file not found: '{fullPath}'. " +
+                    $"Ensure the file exists and is marked CopyToOutputDirectory=Always.");
+
+            string json = File.ReadAllText(fullPath);
+
+            return JsonSerializer.Deserialize<T>(json, _options)
+                ?? throw new InvalidOperationException(
+                    $"[JsonLoader] Deserialization returned null for file: '{fullPath}'. " +
+                    $"Check that the JSON structure matches {typeof(T).Name}.");
+        }
+
+        // ── Load all files in a folder ─────────────────────────────────────────
+
+        /// <summary>
+        /// Returns all JSON file paths under the given folder.
+        /// Used by [TestCaseSource] to drive data-driven test cases.
+        /// Returns relative paths suitable for passing back into Load&lt;T&gt;().
+        /// </summary>
+        public static IEnumerable<string> GetAllFiles(string relativeFolder)
+        {
+            string fullPath = ResolveFullPath(relativeFolder);
+
+            if (!Directory.Exists(fullPath))
+                throw new DirectoryNotFoundException(
+                    $"[JsonLoader] Test data folder not found: '{fullPath}'. " +
+                    $"Check the folder exists under Modules/.");
+
+            return Directory
+                .GetFiles(fullPath, "*.json", SearchOption.TopDirectoryOnly)
+                .Select(f => Path.GetRelativePath(AppContext.BaseDirectory, f));
+        }
+
+        /// <summary>
+        /// Returns all JSON file paths from multiple scenario folders.
+        /// Useful when a single test method covers Create + Edit scenarios.
+        /// </summary>
+        public static IEnumerable<string> GetAllFiles(params string[] relativeFolders)
+        {
+            return relativeFolders.SelectMany(GetAllFiles);
+        }
+
+        // ── Load and return as raw string ──────────────────────────────────────
+
+        /// <summary>Load raw JSON string without deserialization — for inspection/logging.</summary>
+        public static string LoadRaw(string relativePath)
+        {
+            string fullPath = ResolveFullPath(relativePath);
+            return File.ReadAllText(fullPath);
+        }
+
+        // ── Private helpers ────────────────────────────────────────────────────
+
+        private static string ResolveFullPath(string relativePath)
+        {
+            // If already absolute, return as-is
+            if (Path.IsPathRooted(relativePath))
+                return relativePath;
+
+            return Path.Combine(AppContext.BaseDirectory, relativePath);
+        }
+    }
+}

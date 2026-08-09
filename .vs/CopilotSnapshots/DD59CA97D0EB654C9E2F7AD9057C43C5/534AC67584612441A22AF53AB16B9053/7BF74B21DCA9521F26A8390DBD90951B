@@ -1,0 +1,164 @@
+﻿using App.Automation.Core.Enums;
+using App.Automation.Core.Interfaces;
+using App.Automation.Core.Utilities;
+using App.Automation.Modules.Global.Sections;
+using App.Automation.Modules.Sales.Invoice.HeaderHandlers;
+using App.Automation.Modules.Sales.Invoice.LineHandlers;
+using OpenQA.Selenium;
+
+namespace App.Automation.Core.Factories;
+
+public static class HandlerFactory
+{
+    // ══════════════════════════════════════════════════════════════════════
+    // HEADER HANDLER
+    // ══════════════════════════════════════════════════════════════════════
+
+    public static IHeaderHandler CreateHeaderHandler(
+        ModuleType module,
+        TransactionType transaction,
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return (module, transaction) switch
+        {
+            (ModuleType.Sales, TransactionType.Invoice)
+                => new InvoiceHeaderHandler(driver, wait, report),
+
+            // Future:
+            // (ModuleType.Sales, TransactionType.Quotation)
+            //     => new QuotationHeaderHandler(driver, wait, report),
+
+            // (ModuleType.Sales, TransactionType.Order)
+            //     => new OrderHeaderHandler(driver, wait, report),
+
+            // (ModuleType.Sales, TransactionType.DeliveryNote)
+            //     => new DeliveryNoteHeaderHandler(driver, wait, report),
+
+            // (ModuleType.Sales, TransactionType.Return)
+            //     => new ReturnHeaderHandler(driver, wait, report),
+
+            // (ModuleType.Purchase, TransactionType.Invoice)
+            //     => new PurchaseInvoiceHeaderHandler(driver, wait, report),
+
+            _ => throw CreateUnsupportedException(
+                "HeaderHandler",
+                module,
+                transaction)
+        };
+    }
+
+
+    // ══════════════════════════════════════════════════════════════════════
+    // LINE HANDLER
+    // ══════════════════════════════════════════════════════════════════════
+
+    public static ILineHandler CreateLineHandler(
+        ModuleType module,
+        TransactionType transaction,
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return (module, transaction) switch
+        {
+            (ModuleType.Sales, TransactionType.Invoice)
+                => new InvoiceLineHandler(driver, wait, report),
+
+            // Future:
+            // (ModuleType.Sales, TransactionType.Quotation)
+            //     => new QuotationLineHandler(driver, wait, report),
+
+            // (ModuleType.Sales, TransactionType.Order)
+            //     => new OrderLineHandler(driver, wait, report),
+
+            // (ModuleType.Sales, TransactionType.DeliveryNote)
+            //     => new DeliveryNoteLineHandler(driver, wait, report),
+
+            // (ModuleType.Sales, TransactionType.Return)
+            //     => new ReturnLineHandler(driver, wait, report),
+
+            // (ModuleType.Purchase, TransactionType.Invoice)
+            //     => new PurchaseInvoiceLineHandler(driver, wait, report),
+
+            _ => throw CreateUnsupportedException(
+                "LineHandler",
+                module,
+                transaction)
+        };
+    }
+
+
+    // ══════════════════════════════════════════════════════════════════════
+    // COMMON SECTION HANDLERS
+    // ══════════════════════════════════════════════════════════════════════
+
+    public static IHandler CreateChargesHandler(
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return new ChargesHandler(driver, wait, report);
+    }
+
+
+    public static IHandler CreateDiscountHandler(
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return new DiscountHandler(driver, wait, report);
+    }
+
+
+    public static IHandler CreatePaymentsHandler(
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return new PaymentsHandler(driver, wait, report);
+    }
+
+
+    public static IHandler CreateOthersHandler(
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return new OthersHandler(driver, wait, report);
+    }
+
+
+    public static IHandler CreateEntityHandler(
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return new EntityHandler(driver, wait, report);
+    }
+
+
+    public static IHandler CreateExpectationHandler(
+        IWebDriver driver,
+        WaitHelper wait,
+        ReportHelper report)
+    {
+        return new ExpectationHandler(driver, wait, report);
+    }
+
+
+    // ══════════════════════════════════════════════════════════════════════
+    // EXCEPTION
+    // ══════════════════════════════════════════════════════════════════════
+
+    private static NotSupportedException CreateUnsupportedException(
+        string handlerType,
+        ModuleType module,
+        TransactionType transaction)
+    {
+        return new NotSupportedException(
+            $"No {handlerType} registered for " +
+            $"Module='{module}', Transaction='{transaction}'.");
+    }
+}
