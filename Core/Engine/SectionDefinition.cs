@@ -1,19 +1,35 @@
-﻿namespace App.Automation.Core.Engine
+﻿namespace App.Automation.Core.Engine;
+
+public class SectionDefinition<TData>
 {
-    public class SectionDefinition<TData>
-    {
-        public string Name { get; set; } = string.Empty;
+    /// <summary>
+    /// Name displayed in reports/logs.
+    /// Example: Lines, Discount, Charges, Payments, Others.
+    /// </summary>
+    public string Name { get; set; } = string.Empty;
 
-        // Condition to run section
-        public Func<TData, bool> ShouldRun { get; set; } = _ => true;
 
-        // Action to execute
-        public Action<TData> Action { get; set; } = _ => { };
+    /// <summary>
+    /// Determines whether this section should be executed.
+    /// </summary>
+    public Func<TData, bool> ShouldRun { get; set; } = _ => true;
 
-        // Optional validation
-        public Action<TData>? Validate { get; set; }
 
-        // Should save after execution?
-        public bool RequiresSave { get; set; } = true;
-    }
+    /// <summary>
+    /// Action executed when the section is enabled.
+    /// </summary>
+    public Action<TData> Action { get; set; } = _ => { };
+
+
+    /// <summary>
+    /// Optional validation executed after the section action.
+    /// </summary>
+    public Action<TData>? Validate { get; set; }
+
+
+    /// <summary>
+    /// Determines whether the document should be saved
+    /// after this section is executed.
+    /// </summary>
+    public bool RequiresSave { get; set; } = true;
 }

@@ -1,46 +1,56 @@
 ﻿using App.Automation.Core.Engine;
 using App.Automation.Modules.Global.Sections;
 using App.Automation.Modules.Sales.Invoice.DataModels;
-using App.Automation.Modules.Sales.Invoice.HeaderHandlers;
 using App.Automation.Modules.Sales.Invoice.LineHandlers;
 
 namespace App.Automation.Modules.Sales.Invoice.Configuration;
 
 public static class InvoiceSections
 {
+    /// <summary>
+    /// Creates the sections that are executed after the invoice header
+    /// has been filled and saved.
+    ///
+    /// Execution order:
+    ///     Lines
+    ///     Discount
+    ///     Charges
+    ///     Payments
+    ///     Others
+    /// </summary>
     public static List<SectionDefinition<InvoiceDM>> Create(
-        InvoiceHeaderHandler headerHandler,
         InvoiceLineHandler lineHandler,
-        ChargesHandler chargesHandler,
         DiscountHandler discountHandler,
+        ChargesHandler chargesHandler,
         PaymentsHandler paymentsHandler,
         OthersHandler othersHandler)
     {
         return new List<SectionDefinition<InvoiceDM>>
         {
-            // ─────────────────────────────────────────────
-            // HEADER
-            // ─────────────────────────────────────────────
+            // =============================================================
+            // LINES
+            // =============================================================
             new()
             {
-                Name = "Header",
-                //Order = 10,
+                Name = "Lines",
 
-                ShouldRun = d => d.Header != null,
+                ShouldRun = d =>
+                    d.Lines?.Any() == true,
 
                 Action = d =>
                 {
-                    headerHandler.Fill(d.Header);
-                }
+                    lineHandler.Fill(d.Lines!);
+                },
+
+                RequiresSave = true
             },
 
-            // ─────────────────────────────────────────────
+            // =============================================================
             // DISCOUNT
-            // ─────────────────────────────────────────────
+            // =============================================================
             new()
             {
                 Name = "Discount",
-                //Order = 20,
 
                 ShouldRun = d =>
                     d.Discount != null &&
@@ -48,77 +58,66 @@ public static class InvoiceSections
 
                 Action = d =>
                 {
-                    discountHandler.Fill(d.Discount);
-                }
+                    discountHandler.Fill(d.Discount!);
+                },
+
+                RequiresSave = true
             },
 
-            // ─────────────────────────────────────────────
-            // LINES
-            // ─────────────────────────────────────────────
-            new()
-            {
-                Name = "Lines",
-                //Order = 30,
-
-                ShouldRun = d =>
-                    d.Lines?.Any() == true,
-
-                Action = d =>
-                {
-                    lineHandler.Fill(d.Lines);
-                }
-            },
-
-            // ─────────────────────────────────────────────
+            // =============================================================
             // CHARGES
-            // ─────────────────────────────────────────────
+            // =============================================================
             new()
             {
                 Name = "Charges",
-                //Order = 40,
 
                 ShouldRun = d =>
-                    d.Charges?.Items?.Any() == true &&
-                    d.AppPreference.IsChargesEnabled,
+                    d.AppPreference?.IsChargesEnabled == true &&
+                    d.Charges?.Items?.Any() == true,
 
                 Action = d =>
                 {
-                    chargesHandler.Fill(d.Charges);
-                }
+                    chargesHandler.Fill(d.Charges!);
+                },
+
+                RequiresSave = true
             },
 
-            // ─────────────────────────────────────────────
+            // =============================================================
             // PAYMENTS
-            // ─────────────────────────────────────────────
+            // =============================================================
             new()
             {
                 Name = "Payments",
-                //Order = 50,
 
                 ShouldRun = d =>
+                    d.TxnParameter?.UseMultiplePaymentMethod == true &&
                     d.Payments?.Entries?.Any() == true,
 
                 Action = d =>
                 {
-                    paymentsHandler.Fill(d.Payments);
-                }
+                    paymentsHandler.Fill(d.Payments!);
+                },
+
+                RequiresSave = true
             },
 
-            // ─────────────────────────────────────────────
+            // =============================================================
             // OTHERS
-            // ─────────────────────────────────────────────
+            // =============================================================
             new()
             {
                 Name = "Others",
-                //Order = 60,
 
                 ShouldRun = d =>
                     d.Others?.HasData() == true,
 
                 Action = d =>
                 {
-                    othersHandler.Fill(d.Others);
-                }
+                    othersHandler.Fill(d.Others!);
+                },
+
+                RequiresSave = true
             }
         };
     }

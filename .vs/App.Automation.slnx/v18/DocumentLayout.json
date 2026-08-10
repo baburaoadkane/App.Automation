@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "D:\\Platform\\App.Automation\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\configuration\\invoiceworkflow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\configuration\\invoiceworkflow.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\factories\\executorfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\factories\\executorfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\engine\\sectionengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\engine\\sectionengine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\engine\\sectiondefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\engine\\sectiondefinition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\configuration\\invoicesections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\configuration\\invoicesections.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +30,73 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "InvoiceExecutor.cs",
               "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "RelativeToolTip": "Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAAAYwEgAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAKABAAAAAAAAAAAswK0BAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-10T02:51:45.197Z",
+              "WhenOpened": "2026-08-10T15:53:08.521Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "InvoiceSections.cs",
+              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Configuration\\InvoiceSections.cs",
+              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Configuration\\InvoiceSections.cs",
+              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Configuration\\InvoiceSections.cs",
+              "RelativeToolTip": "Modules\\Sales\\Invoice\\Configuration\\InvoiceSections.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAQwHcAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T15:23:15.41Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SectionDefinition.cs",
+              "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Engine\\SectionDefinition.cs",
+              "RelativeDocumentMoniker": "Core\\Engine\\SectionDefinition.cs",
+              "ToolTip": "D:\\Platform\\App.Automation\\Core\\Engine\\SectionDefinition.cs",
+              "RelativeToolTip": "Core\\Engine\\SectionDefinition.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACEAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T16:29:31.03Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ExecutorFactory.cs",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Factories\\ExecutorFactory.cs",
-              "RelativeDocumentMoniker": "Core\\Factories\\ExecutorFactory.cs",
-              "ToolTip": "D:\\Platform\\App.Automation\\Core\\Factories\\ExecutorFactory.cs",
-              "RelativeToolTip": "Core\\Factories\\ExecutorFactory.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAAsAAAAbAAAAAAAAAA==",
+              "Title": "SectionEngine.cs",
+              "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Engine\\SectionEngine.cs",
+              "RelativeDocumentMoniker": "Core\\Engine\\SectionEngine.cs",
+              "ToolTip": "D:\\Platform\\App.Automation\\Core\\Engine\\SectionEngine.cs",
+              "RelativeToolTip": "Core\\Engine\\SectionEngine.cs",
+              "ViewState": "AgIAACEAAAAAAAAAAAAYwDUAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-10T02:15:52.072Z",
+              "WhenOpened": "2026-08-10T16:23:46.288Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InvoiceWorkflow.cs",
+              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Configuration\\InvoiceWorkflow.cs",
+              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Configuration\\InvoiceWorkflow.cs",
+              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Configuration\\InvoiceWorkflow.cs",
+              "RelativeToolTip": "Modules\\Sales\\Invoice\\Configuration\\InvoiceWorkflow.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-10T15:34:52.142Z",
               "EditorCaption": ""
             },
             {

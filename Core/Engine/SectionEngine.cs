@@ -13,13 +13,19 @@ namespace App.Automation.Core.Engine
             Action save,
             ReportHelper report)
         {
-            _sections = sections;
-            _save = save;
-            _report = report;
+            _sections = sections
+                ?? throw new ArgumentNullException(nameof(sections));
+            _save = save
+                ?? throw new ArgumentNullException(nameof(save));
+            _report = report
+                ?? throw new ArgumentNullException(nameof(report));
         }
 
         public void Execute(TData data)
         {
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
             foreach (var section in _sections)
             {
                 try
@@ -35,9 +41,17 @@ namespace App.Automation.Core.Engine
                     section.Action(data);
 
                     if (section.RequiresSave)
+                    {
+                        _report.Info(
+                            $"Saving after Section: {section.Name}");
+
                         _save();
+                    }
 
                     section.Validate?.Invoke(data);
+
+                    _report.Info(
+                    $"Section Completed: {section.Name}");
                 }
                 catch (Exception ex)
                 {

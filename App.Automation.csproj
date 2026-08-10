@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Archieve\" />
     <Folder Include="Config\" />
     <Folder Include="Modules\Inventory\" />
     <Folder Include="Modules\Accounting\" />
@@ -48,7 +49,6 @@
     <Folder Include="Modules\Purchase\GoodsReceipt\Tests\" />
     <Folder Include="Modules\Purchase\GoodsReceipt\Validators\" />
     <Folder Include="Modules\Sales\Invoice\TestData\" />
-    <Folder Include="Archieve\" />
     <Folder Include="TestResults\Html\" />
     <Folder Include="TestResults\Archive\" />
     <Folder Include="TestResults\Screenshots\" />
