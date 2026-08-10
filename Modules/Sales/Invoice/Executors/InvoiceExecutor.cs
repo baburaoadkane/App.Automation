@@ -54,36 +54,36 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
     // ── Entry ──────────────────────────────────────────────────────────────
 
-    public override void Execute(InvoiceDM data)
+    public override void Execute(InvoiceDM document)
     {
-        Report.Info($"── Sales Invoice Executor: {data.ScenarioType} ──");
-        Report.Info($"Test: {data.TestDescription}");
+        Report.Info($"── Sales Invoice Executor: {document.ScenarioType} ──");
+        Report.Info($"Test: {document.TestDescription}");
 
-        switch (data.ScenarioType?.ToUpperInvariant())
+        switch (document.ScenarioType?.ToUpperInvariant())
         {
             case "CREATE":
-                ExecuteCreate(data);
+                ExecuteCreate(document);
                 break;
 
             case "APPROVAL":
-                ExecuteApproval(data);
+                ExecuteApproval(document);
                 break;
 
             //case "NEGATIVE":
-            //    ExecuteNegative(data);
+            //    ExecuteNegative(document);
             //    break;
 
             case "VALIDATION":
-                ExecuteValidation(data);
+                ExecuteValidation(document);
                 break;
 
             default:
-                throw new ArgumentException($"Unknown ScenarioType: {data.ScenarioType}");
+                throw new ArgumentException($"Unknown ScenarioType: {document.ScenarioType}");
         }
     }
 
     // ── CREATE ──────────────────────────────────────────────────────────────
-    private void ExecuteCreate(InvoiceDM data)
+    private void ExecuteCreate(InvoiceDM document)
     {
         ExecuteStep("Navigate to Sales Invoice", () =>
         {
@@ -95,9 +95,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
         ExecuteStep("Fill Header", () =>
         {
-            _headerHandler.Fill(data.Header);
+            _headerHandler.Fill(document.Header);
             Save();
-            ValidateAfterSave(data);
+            ValidateAfterSave(document);
         });
 
         // ── Execute Sections ──────────────────────────────────────────────
@@ -145,7 +145,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
         ExecuteStep("Execute Sections", () =>
         {
-            engine.Execute(data);
+            engine.Execute(document);
         });
 
         ExecuteStep("Start totals API capture", () =>
@@ -161,15 +161,15 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
         ExecuteStep("Validate After View", () =>
         {
-            ValidateAfterView(data);
+            ValidateAfterView(document);
         });
     }
 
     // ── APPROVAL ───────────────────────────────────────────────────────────
 
-    private void ExecuteApproval(InvoiceDM data)
+    private void ExecuteApproval(InvoiceDM document)
     {
-        ExecuteCreate(data);
+        ExecuteCreate(document);
 
         ExecuteStep("Approve Document", () =>
         {
@@ -179,13 +179,13 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
         ExecuteStep("Validate After Approve", () =>
         {
-            ValidateAfterApprove(data);
+            ValidateAfterApprove(document);
         });
     }
 
     // ── VALIDATION ─────────────────────────────────────────────────────────
 
-    private void ExecuteValidation(InvoiceDM data)
+    private void ExecuteValidation(InvoiceDM document)
     {
         Report.Info("Step 1: Navigate to Sales Invoice");
         NavigateToModule("Sales");
@@ -194,61 +194,61 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         SwitchToOldInterface();
 
         Report.Info("Step 2: Fill form with invalid/incomplete data");
-        _headerHandler.Fill(data.Header);
+        _headerHandler.Fill(document.Header);
 
         Report.Info("Step 3: Attempt to Save (expecting validation error)");
         ClickOnForm("Save");
 
         Report.Info("Step 4: Validate validation message");
-        _messageValidator.ValidateValidationMessage(data.Expected);
+        _messageValidator.ValidateValidationMessage(document.Expected);
     }
 
     // ── VALIDATIONS ────────────────────────────────────────────────────────
 
-    private void ValidateAfterSave(InvoiceDM data)
+    private void ValidateAfterSave(InvoiceDM document)
     {
-        if (data.Expected == null)
+        if (document.Expected == null)
         {
             Report.Warning("No Expected values defined — skipping validation.");
             return;
         }
 
-        _messageValidator.ValidateMessage(data.Expected?.Messages?.OnSave,
+        _messageValidator.ValidateMessage(document.Expected?.Messages?.OnSave,
             "dx-toast-message",
             "Save Message"
         );
         _headerValidator.ValidateDocumentNumberGenerated();
     }
 
-    private void ValidateAfterView(InvoiceDM data)
+    private void ValidateAfterView(InvoiceDM document)
     {
-        if (data.Expected == null)
+        if (document.Expected == null)
         {
             Report.Warning("No Expected values defined — skipping validation.");
             return;
         }
 
-        _linesValidator.ValidateLineTotals(data.Lines);
+        _linesValidator.ValidateLineTotals(document.Lines);
 
         var totals = _networkHelper.GetResponse<TotalsResponseDM>();
 
-        _totalsValidator.ValidateTotalsFromApi(data.Expected, totals);
+        _totalsValidator.ValidateTotalsFromApi(document.Expected, totals);
     }
 
-    private void ValidateAfterApprove(InvoiceDM data)
+    private void ValidateAfterApprove(InvoiceDM document)
     {
-        if (data.Expected == null)
+        if (document.Expected == null)
         {
             Report.Warning("No Expected values defined — skipping validation.");
             return;
         }
 
-        _messageValidator.ValidateMessage(data.Expected?.Messages?.OnApprove,
+        _messageValidator.ValidateMessage(document.Expected?.Messages?.OnApprove,
             "dx-toast-message",
             "Approve Message"
         );
-        _headerValidator.ValidateDocumentStatus(data.Expected);
-        _headerValidator.ValidateDocumentPaymentStatus(data.Expected);
+        _headerValidator.ValidateDocumentStatus(document.Expected);
+        _headerValidator.ValidateDocumentPaymentStatus(document.Expected);
     }
 
     // ── Helpers ────────────────────────────────────────────────────────────

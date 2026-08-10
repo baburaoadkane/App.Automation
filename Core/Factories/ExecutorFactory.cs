@@ -2,6 +2,7 @@
 using App.Automation.Core.Interfaces;
 using App.Automation.Core.Utilities;
 using App.Automation.Modules.Sales.Invoice.Executors;
+using App.Automation.Modules.Sales.Invoice.DataModels;
 using OpenQA.Selenium;
 
 namespace App.Automation.Core.Factories;
@@ -15,18 +16,20 @@ public static class ExecutorFactory
         WaitHelper wait,
         ReportHelper report)
     {
-        return (module, transaction) switch
+        if (module == ModuleType.Sales &&
+            transaction == TransactionType.Invoice &&
+            typeof(TDocument) == typeof(InvoiceDM))
         {
-            (ModuleType.Sales, TransactionType.Invoice) =>
-                (IExecutor<TDocument>)(object)new InvoiceExecutor(
-                    driver,
-                    wait,
-                    report),
+            return (IExecutor<TDocument>)(object)new InvoiceExecutor(
+                driver,
+                wait,
+                report);
+        }
 
-            _ => throw new NotSupportedException(
-                $"Executor not configured for " +
-                $"Module='{module}', " +
-                $"Transaction='{transaction}'.")
-        };
+        throw new NotSupportedException(
+            $"Executor not configured for " +
+            $"Module='{module}', " +
+            $"Transaction='{transaction}', " +
+            $"Document='{typeof(TDocument).Name}'.");
     }
 }

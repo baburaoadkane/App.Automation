@@ -98,7 +98,7 @@ namespace App.Automation.Core.Base
             ScrollIntoView(element);
 
             element.Clear();
-            element.SendKeys(value.ToString());
+            element.SendKeys(value.ToString() ?? string.Empty);
             PressEnter();
             Wait.WaitForSeconds(1);
 
@@ -160,7 +160,7 @@ namespace App.Automation.Core.Base
 
             // Set clipboard text 
             ClipboardService.SetText(value);
-            string pasted = ClipboardService.GetText();
+            string pasted = ClipboardService.GetText() ?? string.Empty;
 
             // Paste the value using Ctrl+V
             _actions.KeyDown(Keys.Control)

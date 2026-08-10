@@ -1,7 +1,6 @@
-﻿namespace App.Automation.Core.Interfaces
+﻿namespace App.Automation.Core.Interfaces;
+
+public interface IExecutor<TDocument>
 {
-    public interface IExecutor<TDocument>
-    {
-        void Execute(TDocument document);
-    }
+    void Execute(TDocument document);
 }

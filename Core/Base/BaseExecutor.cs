@@ -13,7 +13,10 @@ namespace App.Automation.Core.Base
         protected readonly ReportHelper Report;
 
         // ── Constructor ────────────────────────────────────────────────────────
-        protected BaseExecutor(IWebDriver driver, WaitHelper wait, ReportHelper report)
+        protected BaseExecutor(
+            IWebDriver driver, 
+            WaitHelper wait, 
+            ReportHelper report)
         {
             Driver = driver ?? throw new ArgumentNullException(nameof(driver));
             Wait = wait ?? throw new ArgumentNullException(nameof(wait));

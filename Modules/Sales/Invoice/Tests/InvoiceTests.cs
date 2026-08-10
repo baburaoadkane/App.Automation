@@ -1,38 +1,31 @@
-﻿using App.Automation.Core.Base;
-using App.Automation.Core.Utilities;
+﻿using App.Automation.Core.Enums;
 using App.Automation.Modules.Sales.Invoice.Builders;
-using App.Automation.Modules.Sales.Invoice.Executors;
+using App.Automation.Modules.Sales.Invoice.DataModels;
 using App.Automation.Tests.Common;
 
 namespace App.Automation.Modules.Sales.Invoice.Tests;
 
 [TestFixture]
-[Category("Sales")]
-[Category("SalesInvoice")]
-public class InvoiceTests : BaseTest
+[Category(TestCategories.Sales)]
+[Category(TestCategories.Invoice)]
+public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 {
-    // ── Executor — initialized per test in SetUp ───────────────────────────
-    private InvoiceExecutor _executor = null!;
+    protected override ModuleType Module =>
+    ModuleType.Sales;
+
+    protected override TransactionType Transaction =>
+    TransactionType.Invoice;
 
     // ── JSON folder paths ──────────────────────────────────────────────────
-    private const string Module = TestDataFolders.Sales.Invoice;
-
-    // ── SetUp ─────────────────────────────────────────────────────
-
-    [SetUp]
-    public override void SetUp()
-    {
-        base.SetUp();
-        _executor = new InvoiceExecutor(Driver, Wait, Report);
-    }
+    private const string FolderPath = TestDataFolders.Sales.Invoice;
 
     // ══════════════════════════════════════════════════════════════════════
     // VALIDATION — programmatic, no JSON file needed
     // ══════════════════════════════════════════════════════════════════════
 
     [Test]
-    [Category("Validation")]
-    [Category("Smoke")]
+    [Category(TestCategories.Validation)]
+    [Category(TestCategories.Smoke)]
     public void Invoice_Validation_MissingCustomer_Smoke()
     {
         var data = InvoiceBuilder
@@ -45,12 +38,12 @@ public class InvoiceTests : BaseTest
             ValidationMessage = "Currency is required."
         };
 
-        _executor.Execute(data);
+        Executor.Execute(data);
     }
 
     [Test]
-    [Category("Validation")]
-    [Category("Smoke")]
+    [Category(TestCategories.Validation)]
+    [Category(TestCategories.Smoke)]
     public void Invoice_Validation_MissingWarehouse_Smoke()
     {
         var data = InvoiceBuilder
@@ -64,16 +57,16 @@ public class InvoiceTests : BaseTest
             ValidationMessage = "Warehouse is required."
         };
 
-        _executor.Execute(data);
+        Executor.Execute(data);
     }
 
     // ══════════════════════════════════════════════════════════════════════
     // VALIDATION - JSON-DRIVEN SCENARIOS
-    // ══════════════════════════════════════════════════════════════════════
+    // ════     
 
     [Test]
     [TestCaseSource(nameof(ValidationScenarios))]
-    [Category("Validation")]
+    [Category(TestCategories.Validation)]
     public void Base_Invoice_Validation_ValidationMessage(string jsonPath)
     {
         var data = InvoiceBuilder
@@ -84,7 +77,7 @@ public class InvoiceTests : BaseTest
         Report.Info($"Scenario: {data.TestDescription}");
         Report.Info($"Expected Error: {data.Expected?.ValidationMessage}");
 
-        _executor.Execute(data);
+        Executor.Execute(data);
     }
 
     // ══════════════════════════════════════════════════════════════════════
@@ -92,8 +85,8 @@ public class InvoiceTests : BaseTest
     // ══════════════════════════════════════════════════════════════════════
 
     [Test]
-    [Category("Create")]
-    [Category("Smoke")]
+    [Category(TestCategories.Create)]
+    [Category(TestCategories.Smoke)]
     public void Invoice_Create_SingleLine()
     {
         var data = InvoiceBuilder
@@ -108,16 +101,16 @@ public class InvoiceTests : BaseTest
             .AsScenario("Create")
             .Build();
 
-        _executor.Execute(data);
+        Executor.Execute(data);
     }
 
     // ══════════════════════════════════════════════════════════════════════
     // CREATE AND APPROVE - programmatic, no JSON file needed
     // ══════════════════════════════════════════════════════════════════════
 
-    [Test, Order(5)]
-    [Category("Approval")]
-    [Category("Smoke")]
+    [Test]
+    [Category(TestCategories.Approval)]
+    [Category(TestCategories.Smoke)]
     public void Invoice_Approval_SingleLine()
     {
         var data = InvoiceBuilder
@@ -132,32 +125,32 @@ public class InvoiceTests : BaseTest
             .WithApproval()
             .Build();
 
-        _executor.Execute(data);
+        Executor.Execute(data);
     }
 
     // ══════════════════════════════════════════════════════════════════════
     // CREATE - JSON-DRIVEN SCENARIOS
     // ══════════════════════════════════════════════════════════════════════
 
-    [Test, Order(6)]
+    [Test]
     [TestCaseSource(nameof(CreateScenarios))]
-    [Category("Create")]
+    [Category(TestCategories.Create)]
     public void Base_Invoice_Create_Multiline_ValidateTotal(string jsonPath)
     {
         var data = InvoiceBuilder.FromJson(jsonPath).Build();
 
         Report.Info($"Scenario: {data.TestDescription}");
 
-        _executor.Execute(data);
+        Executor.Execute(data);
     }
 
     // ══════════════════════════════════════════════════════════════════════
     // APPROVAL - JSON-DRIVEN SCENARIOS
-    // ══════════════════════════════════════════════════════════════════════
+    // ════════════════════════════════════════════
 
-    [Test, Order(7)]
+    [Test]
     [TestCaseSource(nameof(ApprovalScenarios))]
-    [Category("Approval")]
+    [Category(TestCategories.Approval)]
     public void Base_Invoice_Approval_MultiLine_ValidateTotal(string jsonPath)
     {
         var data = InvoiceBuilder
@@ -167,17 +160,13 @@ public class InvoiceTests : BaseTest
 
         Report.Info($"Scenario: {data.TestDescription}");
 
-        _executor.Execute(data);
+        Executor.Execute(data);
     }
 
 
     // ══════════════════════════════════════════════════════════════════════
     // EDIT SCENARIOS
-    // ══════════════════════════════════════════════════════════════════════
-
-    //[Test]
-    //[TestCaseSource(nameof(EditScenarios))]
-    //[Category("Edit")]
+    // ════════════════════════════════════
     //public void Invoice_Edit_Update_Json(string jsonPath)
     //{
     //    var data = SalesInvoiceBuilder
@@ -188,16 +177,16 @@ public class InvoiceTests : BaseTest
     //    Report.Info($"Scenario: {data.TestDescription}");
     //    Report.Info($"Document: {data.DocumentNo}");
 
-    //    _executor.Execute(data);
+    //    Executor.Execute(data);
     //}
 
     // ══════════════════════════════════════════════════════════════════════
     // VALIDATION SCENARIOS
-    // ══════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════
 
     //[Test]
     //[TestCaseSource(nameof(ValidationScenarios))]
-    //[Category("Validation")]
+    //[Category(TestCategories.Validation)]
     //public void Invoice_Validation_ExpectedValues_Json(string jsonPath)
     //{
     //    var data = SalesInvoiceBuilder
@@ -208,63 +197,31 @@ public class InvoiceTests : BaseTest
     //    Report.Info($"Scenario: {data.TestDescription}");
     //    Report.Info($"Document: {data.DocumentNo}");
 
-    //    _executor.Execute(data);
+    //    Executor.Execute(data);
     //}
+    
 
     // ══════════════════════════════════════════════════════════════════════
     // TEST CASE SOURCES
     // ══════════════════════════════════════════════════════════════════════
 
-    /// <summary>Returns all JSON file paths from the Create folder.</summary>
     private static IEnumerable<TestCaseData> CreateScenarios()
-    => BuildTestCases(TestDataFolders.Create(Module));
+        => ScenarioFactory.FromFolder(
+            TestDataFolders.Create(FolderPath));
 
-    /// <summary>Returns all JSON file paths from the Approval folder.</summary>
     private static IEnumerable<TestCaseData> ApprovalScenarios()
-        => BuildTestCases(TestDataFolders.Approval(Module));
+        => ScenarioFactory.FromFolder(
+            TestDataFolders.Approval(FolderPath));
 
-    /// <summary>Returns all JSON file paths from the Negative folder.</summary>
-    private static IEnumerable<TestCaseData> NegativeScenarios()
-        => BuildTestCases(TestDataFolders.Negative(Module));
-
-    /// <summary>Returns all JSON file paths from the Edit folder.</summary>
-    private static IEnumerable<TestCaseData> EditScenarios()
-        => BuildTestCases(TestDataFolders.Edit(Module));
-
-    /// <summary>Returns all JSON file paths from the Validation folder.</summary>
     private static IEnumerable<TestCaseData> ValidationScenarios()
-        => BuildTestCases(TestDataFolders.Validation(Module));
+        => ScenarioFactory.FromFolder(
+            TestDataFolders.Validation(FolderPath));
 
-    /// <summary>
-    /// Discovers all JSON files in the given folder relative to the
-    /// test output directory (AppContext.BaseDirectory).
-    ///
-    /// Called at DISCOVERY TIME by NUnit — must never throw,
-    /// must never use TestContext (it is null during discovery).
-    /// Returns empty silently if the folder has no files yet.
-    /// </summary>
-    /// 
-    private static IEnumerable<TestCaseData> BuildTestCases(string folderPath)
-    {
-        IEnumerable<string> files;
+    private static IEnumerable<TestCaseData> EditScenarios()
+        => ScenarioFactory.FromFolder(
+            TestDataFolders.Edit(FolderPath));
 
-        try
-        {
-            files = JsonLoader.GetAllFiles(folderPath);
-        }
-        catch
-        {
-            // Folder doesn't exist yet — return empty so suite doesn't fail
-            yield break;
-        }
-
-        foreach (string filePath in files)
-        {
-            string testName = Path.GetFileNameWithoutExtension(filePath);
-
-            yield return new TestCaseData(filePath)
-                .SetName(testName)         // Shows filename as test name in report
-                .SetDescription(testName); // Shows in NUnit test explorer
-        }
-    }
+    private static IEnumerable<TestCaseData> NegativeScenarios()
+        => ScenarioFactory.FromFolder(
+            TestDataFolders.Negative(FolderPath));
 }
