@@ -13,9 +13,9 @@ public class WorkflowEngine
     }
 
     public void Execute(WorkflowDefinition workflow)
-    {
-        if (workflow == null)
-            throw new ArgumentNullException(nameof(workflow));
+    {       
+
+        ArgumentNullException.ThrowIfNull(workflow);
 
         _report.Info(
             $"Starting Workflow: {workflow.Name}");

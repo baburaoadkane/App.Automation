@@ -42,9 +42,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private readonly NetworkHelper _networkHelper;
 
     // =====================================================================
-    // CONFIGURATION
+    // WORKFLOW ENGINE
     // =====================================================================
-
+    private readonly WorkflowEngine _workflowEngine;
 
     // =====================================================================
     // CONSTRUCTOR
@@ -119,6 +119,12 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
         _networkHelper =
             new NetworkHelper(driver);
+
+        // -----------------------------------------------------------------
+        // Workflow Engine
+        // -----------------------------------------------------------------
+
+        _workflowEngine = new WorkflowEngine(report);
     }
 
     // =====================================================================
@@ -261,7 +267,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         // STEP 6 — Execute Workflow
         // -----------------------------------------------------------------
 
-        ExecuteWorkflow(workflow);
+        //ExecuteWorkflow(workflow);
+        _workflowEngine.Execute(workflow);
     }
 
     // =====================================================================
@@ -351,23 +358,23 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     // WORKFLOW EXECUTION
     // =====================================================================
 
-    private void ExecuteWorkflow(WorkflowDefinition workflow)
-    {
-        ArgumentNullException.ThrowIfNull(workflow);
+    //private void ExecuteWorkflow(WorkflowDefinition workflow)
+    //{
+    //    ArgumentNullException.ThrowIfNull(workflow);
 
-        Report.Info(
-            $"Starting Workflow: {workflow.Name}");
+    //    Report.Info(
+    //        $"Starting Workflow: {workflow.Name}");
 
-        foreach (var step in workflow.Steps)
-        {
-            ExecuteStep(
-                step.Name,
-                step.Action);
-        }
+    //    foreach (var step in workflow.Steps)
+    //    {
+    //        ExecuteStep(
+    //            step.Name,
+    //            step.Action);
+    //    }
 
-        Report.Info(
-            $"Completed Workflow: {workflow.Name}");
-    }
+    //    Report.Info(
+    //        $"Completed Workflow: {workflow.Name}");
+    //}
 
     // =====================================================================
     // START TOTALS API CAPTURE
