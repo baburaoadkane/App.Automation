@@ -4,13 +4,30 @@ namespace App.Automation.Modules.Sales.Invoice.Configuration;
 
 public static class InvoiceWorkflow
 {
+    /// <summary>
+    /// Creates the Sales Invoice workflow.
+    ///
+    /// Section execution and saving are handled by SectionEngine.
+    /// Each section is configured with RequiresSave = true.
+    ///
+    /// Workflow:
+    ///     Fill Sections
+    ///     Save
+    ///     Validate
+    ///     Submit (optional)
+    ///     Approve (optional)
+    /// </summary>
     public static WorkflowDefinition Create(
         Action fillSections,
-        Action save,
+        Action view,
         Action validate,
         Action? submit = null,
         Action? approve = null)
     {
+        ArgumentNullException.ThrowIfNull(fillSections);
+        ArgumentNullException.ThrowIfNull(view);
+        ArgumentNullException.ThrowIfNull(validate);
+
         var workflow = new WorkflowDefinition
         {
             Name = "Sales Invoice Workflow"
@@ -24,8 +41,8 @@ public static class InvoiceWorkflow
 
         workflow.Steps.Add(new WorkflowStep
         {
-            Name = "Save",
-            Action = save
+            Name = "View",
+            Action = view
         });
 
         workflow.Steps.Add(new WorkflowStep

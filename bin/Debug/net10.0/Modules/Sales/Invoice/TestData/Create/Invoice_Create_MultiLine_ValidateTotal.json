@@ -10,7 +10,7 @@
     "IsChequeBookEnabled": false,
     "IsPDCChequeEnabled": false,
     "IsPricelistEnabled": false,
-    "IsChargesEnabled": true
+    "IsChargesEnabled": false
   },
 
   "TxnParameter": {

@@ -10,7 +10,7 @@ using App.Automation.Modules.Sales.Invoice.LineHandlers;
 using App.Automation.Modules.Sales.Invoice.Validators;
 using OpenQA.Selenium;
 
-namespace App.Automation.Modules.Sales.Invoice.Executors;
+namespace App.Automation.Archieve;
 
 public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 {
@@ -26,6 +26,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private readonly OthersHandler _othersHandler;
     private readonly ExpectationHandler _expectationHandler;
 
+
     // =====================================================================
     // VALIDATORS
     // =====================================================================
@@ -35,14 +36,23 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private readonly TotalsValidator _totalsValidator;
     private readonly MessageValidator _messageValidator;
 
+
+    // =====================================================================
+    // SECTION ENGINE
+    // =====================================================================
+
+    private readonly List<SectionDefinition<InvoiceDM>> _sections;
+
+
     // =====================================================================
     // NETWORK
     // =====================================================================
 
     private readonly NetworkHelper _networkHelper;
 
+
     // =====================================================================
-    // CONFIGURATION
+    // CONSTANTS
     // =====================================================================
 
 
@@ -81,6 +91,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         _expectationHandler =
             new ExpectationHandler(driver, wait, report);
 
+
         // -----------------------------------------------------------------
         // Validators
         // -----------------------------------------------------------------
@@ -113,13 +124,34 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 report,
                 _expectationHandler);
 
+
         // -----------------------------------------------------------------
         // Network
         // -----------------------------------------------------------------
 
         _networkHelper =
             new NetworkHelper(driver);
+
+
+        // -----------------------------------------------------------------
+        // Section configuration
+        //
+        // InvoiceSections is responsible for defining:
+        //     Lines
+        //     Discount
+        //     Charges
+        //     Payments
+        //     Others
+        // -----------------------------------------------------------------
+
+        _sections = InvoiceSections.Create(
+            _linesHandler,
+            _discountHandler,
+            _chargesHandler,
+            _paymentsHandler,
+            _othersHandler);
     }
+
 
     // =====================================================================
     // ENTRY POINT
@@ -127,7 +159,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
     public override void Execute(InvoiceDM document)
     {
-        ArgumentNullException.ThrowIfNull(document);
+        if (document == null)
+            throw new ArgumentNullException(nameof(document));
 
         Report.Info(
             $"── Sales Invoice Executor: {document.ScenarioType} ──");
@@ -155,6 +188,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         }
     }
 
+
     // =====================================================================
     // CREATE
     // =====================================================================
@@ -162,7 +196,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private void ExecuteCreate(InvoiceDM document)
     {
         // -----------------------------------------------------------------
-        // STEP 1 — Navigate to Invoice
+        // STEP 1: Navigate to Sales Invoice
         // -----------------------------------------------------------------
 
         ExecuteStep(
@@ -170,13 +204,21 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             () =>
             {
                 NavigateToModule("Sales");
+
                 NavigateToListing("Invoice");
+
                 OpenFormMode("New");
+
                 SwitchToOldInterface();
             });
 
+
         // -----------------------------------------------------------------
-        // STEP 2 — Fill Header
+        // STEP 2: Fill Header + Save
+        //
+        // Header is intentionally handled outside SectionEngine.
+        // The invoice must be saved after the header before processing
+        // Lines / Discount / Charges / Payments / Others.
         // -----------------------------------------------------------------
 
         ExecuteStep(
@@ -185,84 +227,77 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             {
                 _headerHandler.Fill(document.Header);
 
-                // Header must be saved before working with sections.
                 Save();
 
                 ValidateAfterSave(document);
             });
 
-        // -----------------------------------------------------------------
-        // STEP 3 — Create Section Definitions
-        // -----------------------------------------------------------------
-
-        var sections = InvoiceSections.Create(
-            _linesHandler,
-            _discountHandler,
-            _chargesHandler,
-            _paymentsHandler,
-            _othersHandler);
 
         // -----------------------------------------------------------------
-        // STEP 4 — Create Section Engine
+        // STEP 3: Execute Invoice Sections
         //
-        // SectionEngine will:
+        // Sections are configured in InvoiceSections.cs.
         //
-        //   1. Check ShouldRun
-        //   2. Execute Action
-        //   3. Save if RequiresSave = true
-        //   4. Execute optional validation
-        //
-        // Your InvoiceSections currently use the default:
-        //
-        //     RequiresSave = true
-        //
-        // Therefore every executed section will be saved.
+        // Current order:
+        //     Lines
+        //     Discount
+        //     Charges
+        //     Payments
+        //     Others
         // -----------------------------------------------------------------
 
-        var sectionEngine =
-            new SectionEngine<InvoiceDM>(
-                sections,
-                Save,
-                Report);
+        var engine = new SectionEngine<InvoiceDM>(
+            _sections,
+            Save,
+            Report);
+
+        ExecuteStep(
+            "Execute Sections",
+            () =>
+            {
+                engine.Execute(document);
+            });
+
 
         // -----------------------------------------------------------------
-        // STEP 5 — Create Invoice Workflow
-        //
-        // Workflow:
-        //
-        //   Fill Sections
-        //        ↓
-        //      View
-        //        ↓
-        //    Validate
-        //
+        // STEP 4: Start totals API capture
         // -----------------------------------------------------------------
 
-        var workflow =
-            InvoiceWorkflow.Create(
-                fillSections: () =>
-                {
-                    sectionEngine.Execute(document);
-                },
+        ExecuteStep(
+            "Start totals API capture",
+            () =>
+            {
+                _networkHelper.Clear();
 
-                view: () =>
-                {
-                    StartTotalsCapture();
+                _networkHelper.StartCapture(
+                    "/SalesInvoice/GetTxnSubtotals");
+            });
 
-                    ClickOnForm("View");
-                },
-
-                validate: () =>
-                {
-                    ValidateAfterView(document);
-                });
 
         // -----------------------------------------------------------------
-        // STEP 6 — Execute Workflow
+        // STEP 5: Open View Mode
         // -----------------------------------------------------------------
 
-        ExecuteWorkflow(workflow);
+        ExecuteStep(
+            "Open View Mode",
+            () =>
+            {
+                ClickOnForm("View");
+            });
+
+
+        // -----------------------------------------------------------------
+        // STEP 6: Validate totals and lines
+        // -----------------------------------------------------------------
+
+        ExecuteStep(
+            "Validate After View",
+            () =>
+            {
+                ValidateAfterView(document);
+            });
     }
+
 
     // =====================================================================
     // APPROVAL
@@ -270,10 +305,14 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
     private void ExecuteApproval(InvoiceDM document)
     {
-        // First execute the complete create workflow.
+        // First create the invoice.
         ExecuteCreate(document);
 
-        // Then approve the document.
+
+        // -----------------------------------------------------------------
+        // Approve
+        // -----------------------------------------------------------------
+
         ExecuteStep(
             "Approve Document",
             () =>
@@ -283,7 +322,11 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 Wait.WaitForSeconds(1);
             });
 
-        // Validate approval result.
+
+        // -----------------------------------------------------------------
+        // Validate approval
+        // -----------------------------------------------------------------
+
         ExecuteStep(
             "Validate After Approve",
             () =>
@@ -292,14 +335,15 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             });
     }
 
+
     // =====================================================================
-    // VALIDATION SCENARIO
+    // VALIDATION
     // =====================================================================
 
     private void ExecuteValidation(InvoiceDM document)
     {
         // -----------------------------------------------------------------
-        // STEP 1 — Navigate
+        // STEP 1: Navigate to Sales Invoice
         // -----------------------------------------------------------------
 
         ExecuteStep(
@@ -307,35 +351,41 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             () =>
             {
                 NavigateToModule("Sales");
+
                 NavigateToListing("Invoice");
+
                 OpenFormMode("New");
+
                 SwitchToOldInterface();
             });
 
+
         // -----------------------------------------------------------------
-        // STEP 2 — Fill incomplete / invalid header
+        // STEP 2: Fill invalid/incomplete data
         // -----------------------------------------------------------------
 
         ExecuteStep(
-            "Fill Invalid Invoice Data",
+            "Fill Validation Data",
             () =>
             {
                 _headerHandler.Fill(document.Header);
             });
 
+
         // -----------------------------------------------------------------
-        // STEP 3 — Save and expect validation
+        // STEP 3: Attempt Save
         // -----------------------------------------------------------------
 
         ExecuteStep(
-            "Save Invoice and Expect Validation",
+            "Attempt Save",
             () =>
             {
                 ClickOnForm("Save");
             });
 
+
         // -----------------------------------------------------------------
-        // STEP 4 — Validate message
+        // STEP 4: Validate expected message
         // -----------------------------------------------------------------
 
         ExecuteStep(
@@ -347,47 +397,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             });
     }
 
-    // =====================================================================
-    // WORKFLOW EXECUTION
-    // =====================================================================
-
-    private void ExecuteWorkflow(WorkflowDefinition workflow)
-    {
-        ArgumentNullException.ThrowIfNull(workflow);
-
-        Report.Info(
-            $"Starting Workflow: {workflow.Name}");
-
-        foreach (var step in workflow.Steps)
-        {
-            ExecuteStep(
-                step.Name,
-                step.Action);
-        }
-
-        Report.Info(
-            $"Completed Workflow: {workflow.Name}");
-    }
 
     // =====================================================================
-    // START TOTALS API CAPTURE
-    // =====================================================================
-
-    private void StartTotalsCapture()
-    {
-        ExecuteStep(
-            "Start totals API capture",
-            () =>
-            {
-                _networkHelper.Clear();
-
-                _networkHelper.StartCapture(
-                    "/SalesInvoice/GetTxnSubtotals");
-            });
-    }
-
-    // =====================================================================
-    // VALIDATION — AFTER SAVE
+    // VALIDATION - AFTER SAVE
     // =====================================================================
 
     private void ValidateAfterSave(InvoiceDM document)
@@ -400,16 +412,23 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             return;
         }
 
+
+        // Validate save message
+
         _messageValidator.ValidateMessage(
             document.Expected.Messages?.OnSave,
             "dx-toast-message",
             "Save Message");
 
+
+        // Validate generated document number
+
         _headerValidator.ValidateDocumentNumberGenerated();
     }
 
+
     // =====================================================================
-    // VALIDATION — AFTER VIEW
+    // VALIDATION - AFTER VIEW
     // =====================================================================
 
     private void ValidateAfterView(InvoiceDM document)
@@ -422,31 +441,29 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             return;
         }
 
-        // -----------------------------------------------------------------
+
         // Validate line-level totals
-        // -----------------------------------------------------------------
 
         _linesValidator.ValidateLineTotals(
             document.Lines);
 
-        // -----------------------------------------------------------------
+
         // Get totals from API
-        // -----------------------------------------------------------------
 
         var totals =
             _networkHelper.GetResponse<TotalsResponseDM>();
 
-        // -----------------------------------------------------------------
+
         // Validate invoice totals
-        // -----------------------------------------------------------------
 
         _totalsValidator.ValidateTotalsFromApi(
             document.Expected,
             totals);
     }
 
+
     // =====================================================================
-    // VALIDATION — AFTER APPROVE
+    // VALIDATION - AFTER APPROVE
     // =====================================================================
 
     private void ValidateAfterApprove(InvoiceDM document)
@@ -459,34 +476,30 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             return;
         }
 
+
+        // Validate approval message
+
         _messageValidator.ValidateMessage(
             document.Expected.Messages?.OnApprove,
             "dx-toast-message",
             "Approve Message");
 
+
+        // Validate document status
+
         _headerValidator.ValidateDocumentStatus(
             document.Expected);
+
+
+        // Validate payment status
 
         _headerValidator.ValidateDocumentPaymentStatus(
             document.Expected);
     }
 
-    // =====================================================================
-    // SAVE
-    // =====================================================================
-
-    private void Save()
-    {
-        ExecuteStep(
-            "Save",
-            () =>
-            {
-                ClickOnForm("Save");
-            });
-    }
 
     // =====================================================================
-    // COMMON WORKFLOW STEP WRAPPER
+    // COMMON EXECUTION STEP
     // =====================================================================
 
     private void ExecuteStep(
@@ -494,7 +507,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         Action action)
     {
         try
-        {          
+        {
+            Report.Info($"Step: {stepName}");
+
             action();
         }
         catch (Exception ex)
@@ -504,5 +519,15 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
             throw;
         }
+    }
+
+
+    // =====================================================================
+    // SAVE
+    // =====================================================================
+
+    private void Save()
+    {
+        ClickOnForm("Save");
     }
 }
