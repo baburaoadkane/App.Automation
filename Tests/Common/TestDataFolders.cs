@@ -4,23 +4,23 @@
     {
         public static class Sales
         {
-            public const string Quotation = "Modules/Sales/Data/Quotation";
-            public const string Order = "Modules/Sales/Data/Order";
-            public const string DeliveryNote = "Modules/Sales/Data/DeliveryNote";
-            public const string Invoice = "Modules/Sales/Data/Invoice";
-            public const string Return = "Modules/Sales/Data/Return";
+            public const string Quotation = "Modules/Sales/Quotation/TestData";
+            public const string Order = "Modules/Sales/Order/TestData";
+            public const string DeliveryNote = "Modules/Sales/DeliveryNote/TestData";
+            public const string Invoice = "Modules/Sales/Invoice/TestData";
+            public const string Return = "Modules/Sales/Return/TestData";
         }
 
         public static class Purchase
         {
-            public const string Order = "Modules/Purchase/Data/Order";
-            public const string Invoice = "Modules/Purchase/Data/Invoice";
-            public const string Return = "Modules/Purchase/Data/Return";
+            public const string Order = "Modules/Purchase/Order/TestData";
+            public const string Invoice = "Modules/Purchase/Invoice/TestData";
+            public const string Return = "Modules/Purchase/Return/TestData";
         }
 
         public static class Inventory
         {
-            public const string Adjustment = "Modules/Inventory/Data/Adjustment";
+            public const string Adjustment = "Modules/Inventory/Adjustment/TestData";
         }
 
         public static string Create(string root) => $"{root}/Create";

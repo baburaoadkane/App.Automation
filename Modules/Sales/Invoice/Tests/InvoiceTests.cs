@@ -21,8 +21,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     // ══════════════════════════════════════════════════════════════════════
     // VALIDATION — programmatic, no JSON file needed
-    // ══════════════════════════════════════════════════════════════════════
-
+    // ══════════════════════════════════════════
     [Test]
     [Category(TestCategories.Validation)]
     [Category(TestCategories.Smoke)]

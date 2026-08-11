@@ -55,8 +55,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     // CONSTANTS
     // =====================================================================
 
-    private const string EditInvoiceRoute = "sales/invoice/edit/{0}";
-
 
     // =====================================================================
     // CONSTRUCTOR
