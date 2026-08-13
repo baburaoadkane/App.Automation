@@ -51,10 +51,10 @@ namespace App.Automation.Core.Engine
                     // section.Validate?.Invoke(data);
 
                     if (section.Validate != null)
-{
-    _report.Info($"Validating Section: {section.Name}");
-    section.Validate(data);
-}
+                    {
+                        _report.Info($"Validating Section: {section.Name}");
+                        section.Validate(data);
+                    }
 
                     _report.Info(
                     $"Section Completed: {section.Name}");

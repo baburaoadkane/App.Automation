@@ -11,14 +11,16 @@ public class ApprovalDM
         = ApprovalWorkflowType.None;
 
     /// <summary>
-    /// Action to be performed by the approver.
+    /// Action to be performed.
+    /// Used for simple approval scenarios.
+    /// For multi-level approval, use ApprovalSteps.
     /// </summary>
     public ApprovalAction Action { get; set; }
         = ApprovalAction.None;
 
     /// <summary>
-    /// Approval level for multi-level approval.
-    /// Level 1, Level 2, Level 3, etc.
+    /// Current approval level.
+    /// Example: 1, 2, 3...
     /// </summary>
     public int ApprovalLevel { get; set; }
 
@@ -29,13 +31,19 @@ public class ApprovalDM
 
     /// <summary>
     /// Delegated approver user/login.
-    /// Used when approval is delegated.
+    /// Used when Action = Delegate.
     /// </summary>
     public string? DelegatedApprover { get; set; }
 
     /// <summary>
     /// Comments entered during approval action.
-    /// Useful for Reject and Revise.
+    /// Especially useful for Reject and Revise.
     /// </summary>
     public string? Comments { get; set; }
+
+    /// <summary>
+    /// Multiple approval-level actions.
+    /// Used for multi-level approval workflows.
+    /// </summary>
+    public List<ApprovalStepDM> ApprovalSteps { get; set; } = new();
 }
