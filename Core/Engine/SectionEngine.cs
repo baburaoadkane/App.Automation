@@ -48,7 +48,13 @@ namespace App.Automation.Core.Engine
                         _save();
                     }
 
-                    section.Validate?.Invoke(data);
+                    // section.Validate?.Invoke(data);
+
+                    if (section.Validate != null)
+{
+    _report.Info($"Validating Section: {section.Name}");
+    section.Validate(data);
+}
 
                     _report.Info(
                     $"Section Completed: {section.Name}");
