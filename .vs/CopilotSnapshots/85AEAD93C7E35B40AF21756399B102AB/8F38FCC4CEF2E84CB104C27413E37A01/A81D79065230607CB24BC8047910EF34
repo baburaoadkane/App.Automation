@@ -1,6 +1,4 @@
-﻿using App.Automation.Core.DataModels.Shared;
-using App.Automation.Core.Enums;
-using App.Automation.Core.Utilities;
+﻿using App.Automation.Core.Utilities;
 using App.Automation.Modules.Sales.Invoice.DataModels;
 
 namespace App.Automation.Modules.Sales.Invoice.Builders;
@@ -218,18 +216,11 @@ public class InvoiceBuilder
     /// <summary>
     /// Mark this invoice for the Save → Submit → Approve flow.
     /// Sets RequiresApproval = true and ScenarioType = "Approval".
-    /// Initializes the Approval property with default ApprovalAction.Approve.
     /// </summary>
     public InvoiceBuilder WithApproval()
     {
         _model.RequiresApproval = true;
         _model.ScenarioType = "Approval";
-        _model.Approval = new ApprovalDM
-        {
-            ApprovalLevel = 1,
-            Action = ApprovalAction.Approve,
-            Approver = null
-        };
         return this;
     }
 

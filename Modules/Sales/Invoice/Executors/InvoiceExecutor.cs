@@ -1,521 +1,6 @@
-﻿//using App.Automation.Core.Base;
-//using App.Automation.Core.Engine;
-//using App.Automation.Core.Utilities;
-//using App.Automation.Modules.Global.Sections;
-//using App.Automation.Modules.Global.Validators;
-//using App.Automation.Modules.Sales.Invoice.Configuration;
-//using App.Automation.Modules.Sales.Invoice.DataModels;
-//using App.Automation.Modules.Sales.Invoice.HeaderHandlers;
-//using App.Automation.Modules.Sales.Invoice.LineHandlers;
-//using App.Automation.Modules.Sales.Invoice.Validators;
-//using OpenQA.Selenium;
-
-//namespace App.Automation.Modules.Sales.Invoice.Executors;
-
-//public class InvoiceExecutor : BaseExecutor<InvoiceDM>
-//{
-//    // =====================================================================
-//    // HANDLERS
-//    // =====================================================================
-
-//    private readonly InvoiceHeaderHandler _headerHandler;
-//    private readonly InvoiceLineHandler _linesHandler;
-//    private readonly DiscountHandler _discountHandler;
-//    private readonly ChargesHandler _chargesHandler;
-//    private readonly PaymentsHandler _paymentsHandler;
-//    private readonly OthersHandler _othersHandler;
-//    private readonly ExpectationHandler _expectationHandler;
-
-//    // =====================================================================
-//    // VALIDATORS
-//    // =====================================================================
-
-//    private readonly HeaderValidator _headerValidator;
-//    private readonly LinesValidator _linesValidator;
-//    private readonly TotalsValidator _totalsValidator;
-//    private readonly MessageValidator _messageValidator;
-
-//    // =====================================================================
-//    // NETWORK
-//    // =====================================================================
-
-//    private readonly NetworkHelper _networkHelper;
-
-//    // =====================================================================
-//    // WORKFLOW ENGINE
-//    // =====================================================================
-//    private readonly WorkflowEngine _workflowEngine;
-
-//    // =====================================================================
-//    // CONSTRUCTOR
-//    // =====================================================================
-
-//    public InvoiceExecutor(
-//        IWebDriver driver,
-//        WaitHelper wait,
-//        ReportHelper report)
-//        : base(driver, wait, report)
-//    {
-//        // -----------------------------------------------------------------
-//        // Handlers
-//        // -----------------------------------------------------------------
-
-//        _headerHandler =
-//            new InvoiceHeaderHandler(driver, wait, report);
-
-//        _linesHandler =
-//            new InvoiceLineHandler(driver, wait, report);
-
-//        _discountHandler =
-//            new DiscountHandler(driver, wait, report);
-
-//        _chargesHandler =
-//            new ChargesHandler(driver, wait, report);
-
-//        _paymentsHandler =
-//            new PaymentsHandler(driver, wait, report);
-
-//        _othersHandler =
-//            new OthersHandler(driver, wait, report);
-
-//        _expectationHandler =
-//            new ExpectationHandler(driver, wait, report);
-
-//        // -----------------------------------------------------------------
-//        // Validators
-//        // -----------------------------------------------------------------
-
-//        _headerValidator =
-//            new HeaderValidator(
-//                driver,
-//                wait,
-//                report,
-//                _expectationHandler);
-
-//        _linesValidator =
-//            new LinesValidator(
-//                driver,
-//                wait,
-//                report,
-//                _expectationHandler);
-
-//        _totalsValidator =
-//            new TotalsValidator(
-//                driver,
-//                wait,
-//                report,
-//                _expectationHandler);
-
-//        _messageValidator =
-//            new MessageValidator(
-//                driver,
-//                wait,
-//                report,
-//                _expectationHandler);
-
-//        // -----------------------------------------------------------------
-//        // Network
-//        // -----------------------------------------------------------------
-
-//        _networkHelper =
-//            new NetworkHelper(driver);
-
-//        // -----------------------------------------------------------------
-//        // Workflow Engine
-//        // -----------------------------------------------------------------
-
-//        _workflowEngine = new WorkflowEngine(report);
-//    }
-
-//    // =====================================================================
-//    // ENTRY POINT
-//    // =====================================================================
-
-//    public override void Execute(InvoiceDM document)
-//    {
-//        ArgumentNullException.ThrowIfNull(document);
-
-//        Report.Info(
-//            $"── Sales Invoice Executor: {document.ScenarioType} ──");
-
-//        Report.Info(
-//            $"Test: {document.TestDescription}");
-
-//        switch (document.ScenarioType?.ToUpperInvariant())
-//        {
-//            case "CREATE":
-//                ExecuteCreate(document);
-//                break;
-
-//            case "APPROVAL":
-//                ExecuteApproval(document);
-//                break;
-
-//            case "VALIDATION":
-//                ExecuteValidation(document);
-//                break;
-
-//            default:
-//                throw new ArgumentException(
-//                    $"Unknown ScenarioType: {document.ScenarioType}");
-//        }
-//    }
-
-//    // =====================================================================
-//    // CREATE
-//    // =====================================================================
-
-//    private void ExecuteCreate(InvoiceDM document)
-//    {
-//        // -----------------------------------------------------------------
-//        // STEP 1 — Navigate to Invoice
-//        // -----------------------------------------------------------------
-
-//        ExecuteStep(
-//            "Navigate to Sales Invoice",
-//            () =>
-//            {
-//                NavigateToModule("Sales");
-//                NavigateToListing("Invoice");
-//                OpenFormMode("New");
-//                SwitchToOldInterface();
-//            });
-
-//        // -----------------------------------------------------------------
-//        // STEP 2 — Fill Header
-//        // -----------------------------------------------------------------
-
-//        ExecuteStep(
-//            "Fill Header",
-//            () =>
-//            {
-//                _headerHandler.Fill(document.Header);
-
-//                // Header must be saved before working with sections.
-//                Save();
-
-//                ValidateAfterSave(document);
-//            });
-
-//        // -----------------------------------------------------------------
-//        // STEP 3 — Create Section Definitions
-//        // -----------------------------------------------------------------
-
-//        var sections = InvoiceSections.Create(
-//            _linesHandler,
-//            _discountHandler,
-//            _chargesHandler,
-//            _paymentsHandler,
-//            _othersHandler);
-
-//        // -----------------------------------------------------------------
-//        // STEP 4 — Create Section Engine
-//        //
-//        // SectionEngine will:
-//        //
-//        //   1. Check ShouldRun
-//        //   2. Execute Action
-//        //   3. Save if RequiresSave = true
-//        //   4. Execute optional validation
-//        //
-//        // Your InvoiceSections currently use the default:
-//        //
-//        //     RequiresSave = true
-//        //
-//        // Therefore every executed section will be saved.
-//        // -----------------------------------------------------------------
-
-//        var sectionEngine =
-//            new SectionEngine<InvoiceDM>(
-//                sections,
-//                Save,
-//                Report);
-
-//        // -----------------------------------------------------------------
-//        // STEP 5 — Create Invoice Workflow
-//        //
-//        // Workflow:
-//        //
-//        //   Fill Sections
-//        //        ↓
-//        //      View
-//        //        ↓
-//        //    Validate
-//        //
-//        // -----------------------------------------------------------------
-
-//        var workflow =
-//            InvoiceWorkflow.Create(
-//                fillSections: () =>
-//                {
-//                    sectionEngine.Execute(document);
-//                },
-
-//                view: () =>
-//                {
-//                    StartTotalsCapture();
-
-//                    ClickOnForm("View");
-//                },
-
-//                validate: () =>
-//                {
-//                    ValidateAfterView(document);
-//                });
-
-//        // -----------------------------------------------------------------
-//        // STEP 6 — Execute Workflow
-//        // -----------------------------------------------------------------
-
-//        //ExecuteWorkflow(workflow);
-//        _workflowEngine.Execute(workflow);
-//    }
-
-//    // =====================================================================
-//    // APPROVAL
-//    // =====================================================================
-
-//    private void ExecuteApproval(InvoiceDM document)
-//    {
-//        // First execute the complete create workflow.
-//        ExecuteCreate(document);
-
-//        // Then approve the document.
-//        ExecuteStep(
-//            "Approve Document",
-//            () =>
-//            {
-//                ClickOnForm("Approve");
-
-//                Wait.WaitForSeconds(1);
-//            });
-
-//        // Validate approval result.
-//        ExecuteStep(
-//            "Validate After Approve",
-//            () =>
-//            {
-//                ValidateAfterApprove(document);
-//            });
-//    }
-
-//    // =====================================================================
-//    // VALIDATION SCENARIO
-//    // =====================================================================
-
-//    private void ExecuteValidation(InvoiceDM document)
-//    {
-//        // -----------------------------------------------------------------
-//        // STEP 1 — Navigate
-//        // -----------------------------------------------------------------
-
-//        ExecuteStep(
-//            "Navigate to Sales Invoice",
-//            () =>
-//            {
-//                NavigateToModule("Sales");
-//                NavigateToListing("Invoice");
-//                OpenFormMode("New");
-//                SwitchToOldInterface();
-//            });
-
-//        // -----------------------------------------------------------------
-//        // STEP 2 — Fill incomplete / invalid header
-//        // -----------------------------------------------------------------
-
-//        ExecuteStep(
-//            "Fill Invalid Invoice Data",
-//            () =>
-//            {
-//                _headerHandler.Fill(document.Header);
-//            });
-
-//        // -----------------------------------------------------------------
-//        // STEP 3 — Save and expect validation
-//        // -----------------------------------------------------------------
-
-//        ExecuteStep(
-//            "Save Invoice and Expect Validation",
-//            () =>
-//            {
-//                ClickOnForm("Save");
-//            });
-
-//        // -----------------------------------------------------------------
-//        // STEP 4 — Validate message
-//        // -----------------------------------------------------------------
-
-//        ExecuteStep(
-//            "Validate Validation Message",
-//            () =>
-//            {
-//                _messageValidator.ValidateValidationMessage(
-//                    document.Expected);
-//            });
-//    }
-
-//    // =====================================================================
-//    // WORKFLOW EXECUTION
-//    // =====================================================================
-
-//    //private void ExecuteWorkflow(WorkflowDefinition workflow)
-//    //{
-//    //    ArgumentNullException.ThrowIfNull(workflow);
-
-//    //    Report.Info(
-//    //        $"Starting Workflow: {workflow.Name}");
-
-//    //    foreach (var step in workflow.Steps)
-//    //    {
-//    //        ExecuteStep(
-//    //            step.Name,
-//    //            step.Action);
-//    //    }
-
-//    //    Report.Info(
-//    //        $"Completed Workflow: {workflow.Name}");
-//    //}
-
-//    // =====================================================================
-//    // START TOTALS API CAPTURE
-//    // =====================================================================
-
-//    private void StartTotalsCapture()
-//    {
-//        ExecuteStep(
-//            "Start totals API capture",
-//            () =>
-//            {
-//                _networkHelper.Clear();
-
-//                _networkHelper.StartCapture(
-//                    "/SalesInvoice/GetTxnSubtotals");
-//            });
-//    }
-
-//    // =====================================================================
-//    // VALIDATION — AFTER SAVE
-//    // =====================================================================
-
-//    private void ValidateAfterSave(InvoiceDM document)
-//    {
-//        if (document.Expected == null)
-//        {
-//            Report.Warning(
-//                "No Expected values defined — skipping validation.");
-
-//            return;
-//        }
-
-//        _messageValidator.ValidateMessage(
-//            document.Expected.Messages?.OnSave,
-//            "dx-toast-message",
-//            "Save Message");
-
-//        _headerValidator.ValidateDocumentNumberGenerated();
-//    }
-
-//    // =====================================================================
-//    // VALIDATION — AFTER VIEW
-//    // =====================================================================
-
-//    private void ValidateAfterView(InvoiceDM document)
-//    {
-//        if (document.Expected == null)
-//        {
-//            Report.Warning(
-//                "No Expected values defined — skipping validation.");
-
-//            return;
-//        }
-
-//        // -----------------------------------------------------------------
-//        // Validate line-level totals
-//        // -----------------------------------------------------------------
-
-//        _linesValidator.ValidateLineTotals(
-//            document.Lines);
-
-//        // -----------------------------------------------------------------
-//        // Get totals from API
-//        // -----------------------------------------------------------------
-
-//        var totals =
-//            _networkHelper.GetResponse<TotalsResponseDM>();
-
-//        // -----------------------------------------------------------------
-//        // Validate invoice totals
-//        // -----------------------------------------------------------------
-
-//        _totalsValidator.ValidateTotalsFromApi(
-//            document.Expected,
-//            totals);
-//    }
-
-//    // =====================================================================
-//    // VALIDATION — AFTER APPROVE
-//    // =====================================================================
-
-//    private void ValidateAfterApprove(InvoiceDM document)
-//    {
-//        if (document.Expected == null)
-//        {
-//            Report.Warning(
-//                "No Expected values defined — skipping validation.");
-
-//            return;
-//        }
-
-//        _messageValidator.ValidateMessage(
-//            document.Expected.Messages?.OnApprove,
-//            "dx-toast-message",
-//            "Approve Message");
-
-//        _headerValidator.ValidateDocumentStatus(
-//            document.Expected);
-
-//        _headerValidator.ValidateDocumentPaymentStatus(
-//            document.Expected);
-//    }
-
-//    // =====================================================================
-//    // SAVE
-//    // =====================================================================
-
-//    private void Save()
-//    {
-//        ExecuteStep(
-//            "Save",
-//            () =>
-//            {
-//                ClickOnForm("Save");
-//            });
-//    }
-
-//    // =====================================================================
-//    // COMMON WORKFLOW STEP WRAPPER
-//    // =====================================================================
-
-//    private void ExecuteStep(
-//        string stepName,
-//        Action action)
-//    {
-//        try
-//        {          
-//            action();
-//        }
-//        catch (Exception ex)
-//        {
-//            Report.Fail(
-//                $"Failed at step: {stepName} | {ex.Message}");
-
-//            throw;
-//        }
-//    }
-//}
-
-using App.Automation.Core.Base;
+﻿using App.Automation.Core.Base;
 using App.Automation.Core.Engine;
+using App.Automation.Core.Enums;
 using App.Automation.Core.Utilities;
 using App.Automation.Modules.Global.Sections;
 using App.Automation.Modules.Global.Validators;
@@ -541,6 +26,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private readonly ChargesHandler _chargesHandler;
     private readonly PaymentsHandler _paymentsHandler;
     private readonly OthersHandler _othersHandler;
+
     private readonly ExpectationHandler _expectationHandler;
     private readonly InvoiceApprovalHandler _approvalHandler;
 
@@ -558,6 +44,10 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     // ================================================================
 
     private readonly NetworkHelper _networkHelper;
+
+    // ================================================================
+    // CONSTRUCTOR
+    // ================================================================
 
     public InvoiceExecutor(
         IWebDriver driver,
@@ -622,7 +112,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     }
 
     // ================================================================
-    // ENTRY
+    // ENTRY POINT
     // ================================================================
 
     public override void Execute(InvoiceDM document)
@@ -638,49 +128,34 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         switch (document.ScenarioType?.Trim().ToUpperInvariant())
         {
             case "CREATE":
-
                 ExecuteCreate(document);
-
                 break;
 
             case "VALIDATION":
-
                 ExecuteValidation(document);
-
                 break;
 
-            case "APPROVAL":
-
-                ExecuteApproval(document);
-
+            case "DIRECT_APPROVAL":
+                ExecuteDirectApproval(document);
                 break;
 
             case "SUBMIT":
+                ExecuteSubmitForApproval(document);
+                break;
 
-                ExecuteSubmit(document);
-
+            case "APPROVAL":
+                ExecuteApproval(document);
                 break;
 
             case "REJECT":
-
                 ExecuteReject(document);
-
                 break;
 
             case "REVISE":
-
                 ExecuteRevise(document);
-
-                break;
-
-            case "DELEGATE":
-
-                ExecuteDelegate(document);
-
                 break;
 
             default:
-
                 throw new ArgumentException(
                     $"Unknown ScenarioType: {document.ScenarioType}");
         }
@@ -694,6 +169,10 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     {
         NavigateToInvoiceNew();
 
+        // ------------------------------------------------------------
+        // HEADER
+        // ------------------------------------------------------------
+
         ExecuteStep(
             "Fill Header",
             () =>
@@ -704,6 +183,20 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
                 ValidateAfterSave(document);
             });
+
+        // ------------------------------------------------------------
+        // SECTIONS
+        //
+        // InvoiceSections defines:
+        //     Lines
+        //     Discount
+        //     Charges
+        //     Payments
+        //     Others
+        //
+        // SectionEngine automatically saves after every section
+        // because RequiresSave = true.
+        // ------------------------------------------------------------
 
         var sections =
             InvoiceSections.Create(
@@ -726,7 +219,15 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 sectionEngine.Execute(document);
             });
 
+        // ------------------------------------------------------------
+        // TOTALS API CAPTURE
+        // ------------------------------------------------------------
+
         StartTotalsCapture();
+
+        // ------------------------------------------------------------
+        // VIEW
+        // ------------------------------------------------------------
 
         ExecuteStep(
             "Open View Mode",
@@ -734,6 +235,10 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             {
                 ClickOnForm("View");
             });
+
+        // ------------------------------------------------------------
+        // VALIDATE
+        // ------------------------------------------------------------
 
         ExecuteStep(
             "Validate Invoice",
@@ -744,10 +249,60 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     }
 
     // ================================================================
-    // SUBMIT
+    // DIRECT APPROVAL
+    //
+    // Workflow:
+    //
+    // Create
+    //   ↓
+    // Save
+    //   ↓
+    // View
+    //   ↓
+    // Direct Approve
+    //
     // ================================================================
 
-    private void ExecuteSubmit(InvoiceDM document)
+    private void ExecuteDirectApproval(InvoiceDM document)
+    {
+        ExecuteCreate(document);
+
+        var workflow =
+            ApprovalWorkflow.CreateDirectApprovalWorkflow(
+                approve: () =>
+                {
+                    _approvalHandler.Approve();
+                },
+
+                validate: () =>
+                {
+                    ValidateAfterApprove(document);
+                });
+
+        var engine =
+            new WorkflowEngine(Report);
+
+        engine.Execute(workflow);
+    }
+
+    // ================================================================
+    // SUBMIT FOR APPROVAL
+    //
+    // Workflow:
+    //
+    // Create
+    //   ↓
+    // Save
+    //   ↓
+    // View
+    //   ↓
+    // Submit for Approval
+    //
+    // Approver acts separately.
+    //
+    // ================================================================
+
+    private void ExecuteSubmitForApproval(InvoiceDM document)
     {
         ExecuteCreate(document);
 
@@ -757,6 +312,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 {
                     _approvalHandler.Submit();
                 },
+
                 validateSubmit: () =>
                 {
                     ValidateAfterSubmit(document);
@@ -770,78 +326,277 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
     // ================================================================
     // APPROVAL
+    //
+    // Supports:
+    //
+    // Single Level:
+    //     Level 1 → Approve / Reject / Revise
+    //
+    // Multi Level:
+    //     Level 1 → Approve
+    //     Level 2 → Approve
+    //     Level 3 → Approve
+    //
+    // Or any level can Reject / Revise.
+    //
     // ================================================================
 
     private void ExecuteApproval(InvoiceDM document)
     {
-        ExecuteCreate(document);
+        ArgumentNullException.ThrowIfNull(document.Approval);
 
-        ExecuteSubmitForApproval(document);
+        // ------------------------------------------------------------
+        // Determine approval steps
+        // ------------------------------------------------------------
 
-        int approvalLevel =
-            GetApprovalLevel(document);
+        var approvalSteps =
+            document.Approval.ApprovalSteps;
 
-        ExecuteApprovalLevel(
+        // ------------------------------------------------------------
+        // If ApprovalSteps are not provided, use the simple
+        // ApprovalDM properties.
+        //
+        // This supports:
+        //
+        // ApprovalLevel = 1
+        // Action = Approve
+        //
+        // ------------------------------------------------------------
+
+        if (approvalSteps == null ||
+            approvalSteps.Count == 0)
+        {
+            ExecuteSingleApproval(document);
+
+            return;
+        }
+
+        // ------------------------------------------------------------
+        // Multi-level approval
+        // ------------------------------------------------------------
+
+        ExecuteMultiLevelApproval(
             document,
-            approvalLevel);
+            approvalSteps);
     }
 
     // ================================================================
-    // REJECT
+    // SINGLE LEVEL APPROVAL
+    // ================================================================
+
+    private void ExecuteSingleApproval(
+        InvoiceDM document)
+    {
+        ArgumentNullException.ThrowIfNull(document.Approval);
+
+        int approvalLevel =
+            document.Approval.ApprovalLevel;
+
+        if (approvalLevel <= 0)
+        {
+            approvalLevel = 1;
+        }
+
+        var action =
+            document.Approval.Action;
+
+        Report.Info(
+            $"Approval Level: {approvalLevel}");
+
+        Report.Info(
+            $"Approval Action: {action}");
+
+        ExecuteApprovalAction(
+            document,
+            approvalLevel,
+            action);
+    }
+
+    // ================================================================
+    // MULTI LEVEL APPROVAL
+    // ================================================================
+
+    private void ExecuteMultiLevelApproval(
+        InvoiceDM document,
+        List<Core.DataModels.Shared.ApprovalStepDM> approvalSteps)
+    {
+        foreach (var approvalStep in
+                 approvalSteps.OrderBy(x => x.Level))
+        {
+            if (approvalStep.Level <= 0)
+            {
+                throw new ArgumentException(
+                    $"Invalid approval level: " +
+                    $"{approvalStep.Level}");
+            }
+
+            if (approvalStep.Action == ApprovalAction.None)
+            {
+                throw new ArgumentException(
+                    $"Approval action is not configured " +
+                    $"for Level {approvalStep.Level}.");
+            }
+
+            Report.Info(
+                $"================================================");
+
+            Report.Info(
+                $"Approval Level: {approvalStep.Level}");
+
+            Report.Info(
+                $"Approver: {approvalStep.Approver}");
+
+            Report.Info(
+                $"Action: {approvalStep.Action}");
+
+            Report.Info(
+                $"================================================");
+
+            // --------------------------------------------------------
+            // Navigate to pending approval for this level
+            // --------------------------------------------------------
+
+            NavigateToPendingApproval(document);
+
+            // --------------------------------------------------------
+            // Execute configured action
+            // --------------------------------------------------------
+
+            ExecuteApprovalAction(
+                document,
+                approvalStep.Level,
+                approvalStep.Action,
+                approvalStep.Comments);
+
+            // --------------------------------------------------------
+            // Stop immediately if request is rejected or revised.
+            //
+            // There is no next approval level after:
+            //
+            // Reject
+            // Revise
+            //
+            // --------------------------------------------------------
+
+            if (approvalStep.Action == ApprovalAction.Reject ||
+                approvalStep.Action == ApprovalAction.Revise)
+            {
+                Report.Info(
+                    $"Approval workflow ended at Level " +
+                    $"{approvalStep.Level} with action " +
+                    $"{approvalStep.Action}.");
+
+                break;
+            }
+        }
+    }
+
+    // ================================================================
+    // APPROVAL ACTION
+    // ================================================================
+
+    private void ExecuteApprovalAction(
+        InvoiceDM document,
+        int approvalLevel,
+        ApprovalAction action,
+        string? comments = null)
+    {
+        switch (action)
+        {
+            case ApprovalAction.Approve:
+
+                ExecuteStep(
+                    $"Approve Level {approvalLevel}",
+                    () =>
+                    {
+                        _approvalHandler.Approve();
+
+                        ValidateAfterApprove(document);
+                    });
+
+                break;
+
+            case ApprovalAction.Reject:
+
+                ExecuteStep(
+                    $"Reject Level {approvalLevel}",
+                    () =>
+                    {
+                        _approvalHandler.Reject(comments);
+
+                        ValidateAfterReject(document);
+                    });
+
+                break;
+
+            case ApprovalAction.Revise:
+
+                ExecuteStep(
+                    $"Revise Level {approvalLevel}",
+                    () =>
+                    {
+                        _approvalHandler.Revise(comments);
+
+                        ValidateAfterRevise(document);
+                    });
+
+                break;
+
+            default:
+
+                throw new ArgumentException(
+                    $"Unsupported approval action " +
+                    $"'{action}' at approval level " +
+                    $"{approvalLevel}.");
+        }
+    }
+
+    // ================================================================
+    // REJECT SCENARIO
     // ================================================================
 
     private void ExecuteReject(InvoiceDM document)
     {
+        ArgumentNullException.ThrowIfNull(document.Approval);
+
         NavigateToPendingApproval(document);
 
-        ExecuteStep(
-            "Reject Invoice",
-            () =>
-            {
-                _approvalHandler.Reject();
-            });
+        int approvalLevel =
+            document.Approval.ApprovalLevel > 0
+                ? document.Approval.ApprovalLevel
+                : 1;
 
-        ValidateAfterReject(document);
+        ExecuteApprovalAction(
+            document,
+            approvalLevel,
+            ApprovalAction.Reject,
+            document.Approval.Comments);
     }
 
     // ================================================================
-    // REVISE
+    // REVISE SCENARIO
     // ================================================================
 
     private void ExecuteRevise(InvoiceDM document)
     {
+        ArgumentNullException.ThrowIfNull(document.Approval);
+
         NavigateToPendingApproval(document);
 
-        ExecuteStep(
-            "Request Revision",
-            () =>
-            {
-                _approvalHandler.Revise();
-            });
+        int approvalLevel =
+            document.Approval.ApprovalLevel > 0
+                ? document.Approval.ApprovalLevel
+                : 1;
 
-        ValidateAfterRevise(document);
+        ExecuteApprovalAction(
+            document,
+            approvalLevel,
+            ApprovalAction.Revise,
+            document.Approval.Comments);
     }
 
     // ================================================================
-    // DELEGATE
-    // ================================================================
-
-    private void ExecuteDelegate(InvoiceDM document)
-    {
-        NavigateToPendingApproval(document);
-
-        ExecuteStep(
-            "Delegate Approval",
-            () =>
-            {
-                _approvalHandler.Delegate();
-            });
-
-        ValidateAfterDelegate(document);
-    }
-
-    // ================================================================
-    // VALIDATION
+    // VALIDATION SCENARIO
     // ================================================================
 
     private void ExecuteValidation(InvoiceDM document)
@@ -881,49 +636,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     }
 
     // ================================================================
-    // APPROVAL LEVEL
-    // ================================================================
-
-    private void ExecuteApprovalLevel(
-        InvoiceDM document,
-        int approvalLevel)
-    {
-        var workflow =
-            ApprovalWorkflow.CreateApprovalWorkflow(
-                approvalLevel,
-
-                approve: () =>
-                {
-                    _approvalHandler.Approve();
-                },
-
-                reject: () =>
-                {
-                    _approvalHandler.Reject();
-                },
-
-                revise: () =>
-                {
-                    _approvalHandler.Revise();
-                },
-
-                delegateApproval: () =>
-                {
-                    _approvalHandler.Delegate();
-                },
-
-                validate: () =>
-                {
-                    ValidateAfterApprove(document);
-                });
-
-        var engine =
-            new WorkflowEngine(Report);
-
-        engine.Execute(workflow);
-    }
-
-    // ================================================================
     // SAVE
     // ================================================================
 
@@ -953,12 +665,18 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         InvoiceDM document)
     {
         Report.Info(
-            $"Navigate to pending approval for: " +
-            $"{document.DocumentNo}");
+            $"Navigate to pending approval " +
+            $"for document: {document.DocumentNo}");
 
         // TODO:
-        // Replace this with the actual ERP navigation
-        // to the approval/pending approval screen.
+        // Replace this implementation with the actual
+        // ERP navigation to the Pending Approval screen.
+        //
+        // Example:
+        //
+        // NavigateToModule("Sales");
+        // NavigateToListing("Invoice");
+        // OpenPendingApproval(document.DocumentNo);
     }
 
     // ================================================================
@@ -988,7 +706,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         if (document.Expected == null)
         {
             Report.Warning(
-                "No Expected values defined — skipping validation.");
+                "No Expected values defined — " +
+                "skipping validation.");
 
             return;
         }
@@ -1008,7 +727,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         if (document.Expected == null)
         {
             Report.Warning(
-                "No Expected values defined — skipping validation.");
+                "No Expected values defined — " +
+                "skipping validation.");
 
             return;
         }
@@ -1032,7 +752,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         if (document.Expected == null)
         {
             Report.Warning(
-                "No Expected values defined — skipping validation.");
+                "No Expected values defined — " +
+                "skipping validation.");
 
             return;
         }
@@ -1049,7 +770,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         if (document.Expected == null)
         {
             Report.Warning(
-                "No Expected values defined — skipping validation.");
+                "No Expected values defined — " +
+                "skipping validation.");
 
             return;
         }
@@ -1060,17 +782,25 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             "Approve Message");
 
         _headerValidator
-            .ValidateDocumentStatus(document.Expected);
+            .ValidateDocumentStatus(
+                document.Expected);
 
         _headerValidator
-            .ValidateDocumentPaymentStatus(document.Expected);
+            .ValidateDocumentPaymentStatus(
+                document.Expected);
     }
 
     private void ValidateAfterReject(
         InvoiceDM document)
     {
         if (document.Expected == null)
+        {
+            Report.Warning(
+                "No Expected values defined — " +
+                "skipping validation.");
+
             return;
+        }
 
         _messageValidator.ValidateMessage(
             document.Expected.Messages?.OnReject,
@@ -1082,7 +812,13 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         InvoiceDM document)
     {
         if (document.Expected == null)
+        {
+            Report.Warning(
+                "No Expected values defined — " +
+                "skipping validation.");
+
             return;
+        }
 
         _messageValidator.ValidateMessage(
             document.Expected.Messages?.OnRevise,
@@ -1090,51 +826,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             "Revise Message");
     }
 
-    private void ValidateAfterDelegate(
-        InvoiceDM document)
-    {
-        if (document.Expected == null)
-            return;
-
-        _messageValidator.ValidateMessage(
-            document.Expected.Messages?.OnDelegate,
-            "dx-toast-message",
-            "Delegate Message");
-    }
-
     // ================================================================
-    // HELPERS
+    // GENERIC STEP EXECUTION
     // ================================================================
-
-    private int GetApprovalLevel(
-        InvoiceDM document)
-    {
-        // TODO:
-        // Replace with your actual InvoiceDM approval-level property.
-        //
-        // Temporary default:
-        return 1;
-    }
-
-    private void ExecuteSubmitForApproval(
-        InvoiceDM document)
-    {
-        var workflow =
-            ApprovalWorkflow.CreateSubmitWorkflow(
-                submit: () =>
-                {
-                    _approvalHandler.Submit();
-                },
-                validateSubmit: () =>
-                {
-                    ValidateAfterSubmit(document);
-                });
-
-        var engine =
-            new WorkflowEngine(Report);
-
-        engine.Execute(workflow);
-    }
 
     private void ExecuteStep(
         string stepName,
@@ -1150,7 +844,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         catch (Exception ex)
         {
             Report.Fail(
-                $"Failed at step: {stepName} | {ex.Message}");
+                $"Failed at step: {stepName} | " +
+                $"{ex.Message}");
 
             throw;
         }

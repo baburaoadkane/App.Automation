@@ -1,6 +1,4 @@
-﻿using App.Automation.Core.DataModels.Shared;
-using App.Automation.Core.Enums;
-using App.Automation.Core.Utilities;
+﻿using App.Automation.Core.Utilities;
 using App.Automation.Modules.Sales.Invoice.DataModels;
 
 namespace App.Automation.Modules.Sales.Invoice.Builders;
@@ -224,10 +222,10 @@ public class InvoiceBuilder
     {
         _model.RequiresApproval = true;
         _model.ScenarioType = "Approval";
-        _model.Approval = new ApprovalDM
+        _model.Approval = new Core.DataModels.Shared.ApprovalDM
         {
             ApprovalLevel = 1,
-            Action = ApprovalAction.Approve,
+            Action = Core.Enums.ApprovalAction.Approve,
             Approver = null
         };
         return this;

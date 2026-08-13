@@ -14,6 +14,10 @@ public class InvoiceApprovalHandler : BaseHandler
     {
     }
 
+    // ================================================================
+    // SUBMIT FOR APPROVAL
+    // ================================================================
+
     public void Submit()
     {
         Report.Info("Submitting invoice for approval.");
@@ -24,6 +28,10 @@ public class InvoiceApprovalHandler : BaseHandler
 
         Report.Info("Invoice submitted for approval.");
     }
+
+    // ================================================================
+    // APPROVE
+    // ================================================================
 
     public void Approve()
     {
@@ -36,9 +44,23 @@ public class InvoiceApprovalHandler : BaseHandler
         Report.Info("Invoice approved.");
     }
 
-    public void Reject()
+    // ================================================================
+    // REJECT
+    // ================================================================
+
+    public void Reject(string? comments = null)
     {
         Report.Info("Rejecting invoice.");
+
+        if (!string.IsNullOrWhiteSpace(comments))
+        {
+            Report.Info(
+                $"Reject comment provided: {comments}");
+
+            // TODO:
+            // Enter rejection comment here when the
+            // actual ERP comment field/locator is known.
+        }
 
         ClickOnButton("Reject");
 
@@ -47,9 +69,23 @@ public class InvoiceApprovalHandler : BaseHandler
         Report.Info("Invoice rejected.");
     }
 
-    public void Revise()
+    // ================================================================
+    // REVISE
+    // ================================================================
+
+    public void Revise(string? comments = null)
     {
         Report.Info("Requesting invoice revision.");
+
+        if (!string.IsNullOrWhiteSpace(comments))
+        {
+            Report.Info(
+                $"Revision comment provided: {comments}");
+
+            // TODO:
+            // Enter revision comment here when the
+            // actual ERP comment field/locator is known.
+        }
 
         ClickOnButton("Revise");
 
@@ -57,6 +93,13 @@ public class InvoiceApprovalHandler : BaseHandler
 
         Report.Info("Invoice sent for revision.");
     }
+
+    // ================================================================
+    // DELEGATE
+    //
+    // Kept as a separate capability.
+    // It is NOT part of the normal approval workflow.
+    // ================================================================
 
     public void Delegate()
     {
@@ -69,15 +112,25 @@ public class InvoiceApprovalHandler : BaseHandler
         Report.Info("Invoice approval delegated.");
     }
 
+    // ================================================================
+    // BUTTON
+    // ================================================================
+
     private void ClickOnButton(string buttonText)
     {
         By button = By.XPath(
-            $"//span[contains(@class,'dx-vam') and normalize-space()='{buttonText}']" +
-            $" | //button[normalize-space()='{buttonText}']"
+            $"//span[contains(@class,'dx-vam') and " +
+            $"normalize-space()='{buttonText}']" +
+            $" | " +
+            $"//button[normalize-space()='{buttonText}']"
         );
 
         Wait.UntilClickable(button).Click();
     }
+
+    // ================================================================
+    // LOADER
+    // ================================================================
 
     private void WaitForLoader()
     {
@@ -85,7 +138,9 @@ public class InvoiceApprovalHandler : BaseHandler
 
         try
         {
-            Wait.UntilInvisible(loader, timeoutSeconds: 5);
+            Wait.UntilInvisible(
+                loader,
+                timeoutSeconds: 5);
         }
         catch
         {

@@ -27,6 +27,8 @@ public class MessageDM
     public string? OnSave { get; set; }
     public string? OnView { get; set; }
     public string? OnEdit { get; set; }
+    public string? OnRevise { get; set; }
+    public string? OnReject { get; set; }
     public string? OnApprove { get; set; }
     public string? OnDelete { get; set; }
     public string? OnSubmit { get; set; }
