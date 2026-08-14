@@ -11,6 +11,8 @@ public static class TestCategories
     public const string Create = "Create";
     public const string Edit = "Edit";
     public const string Delete = "Delete";
+    public const string Direct_Approval = "Direct_Approval";
+    public const string Submit = "Submit";
     public const string Approval = "Approval";
     public const string Validation = "Validation";
     public const string Negative = "Negative";

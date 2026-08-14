@@ -34,11 +34,11 @@ public class InvoiceApprovalHandler : BaseHandler
     // ================================================================
 
     public void Approve()
-    {
+    { 
         Report.Info("Approving invoice.");
 
         ClickOnButton("Approve");
-
+        
         WaitForLoader();
 
         Report.Info("Invoice approved.");
@@ -126,7 +126,7 @@ public class InvoiceApprovalHandler : BaseHandler
         );
 
         Wait.UntilClickable(button).Click();
-    }
+    }    
 
     // ================================================================
     // LOADER

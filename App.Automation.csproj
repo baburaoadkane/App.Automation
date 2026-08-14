@@ -34,7 +34,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Folder Include="Archieve\" />
 		<Folder Include="Config\" />
 		<Folder Include="Modules\Inventory\" />
 		<Folder Include="Modules\Accounting\" />
