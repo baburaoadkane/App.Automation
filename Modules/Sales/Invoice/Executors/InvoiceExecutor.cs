@@ -19,16 +19,16 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     // ================================================================
     // HANDLERS
     // ================================================================
-
+    private readonly LoginHelper _loginHelper;
     private readonly InvoiceHeaderHandler _headerHandler;
     private readonly InvoiceLineHandler _linesHandler;
     private readonly DiscountHandler _discountHandler;
     private readonly ChargesHandler _chargesHandler;
     private readonly PaymentsHandler _paymentsHandler;
     private readonly OthersHandler _othersHandler;
-
     private readonly ExpectationHandler _expectationHandler;
     private readonly InvoiceApprovalHandler _approvalHandler;
+    private readonly ApprovalNavigationHandler _approvalNavigationHandler;
 
     // ================================================================
     // VALIDATORS
@@ -55,6 +55,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         ReportHelper report)
         : base(driver, wait, report)
     {
+        _loginHelper = new LoginHelper(driver, wait);
+
         _headerHandler =
             new InvoiceHeaderHandler(driver, wait, report);
 
@@ -79,32 +81,23 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         _approvalHandler =
             new InvoiceApprovalHandler(driver, wait, report);
 
+        _approvalNavigationHandler =
+            new ApprovalNavigationHandler(driver, wait, report);
+
         _headerValidator =
-            new HeaderValidator(
-                driver,
-                wait,
-                report,
+            new HeaderValidator(driver, wait, report,
                 _expectationHandler);
 
         _linesValidator =
-            new LinesValidator(
-                driver,
-                wait,
-                report,
+            new LinesValidator(driver, wait, report,
                 _expectationHandler);
 
         _totalsValidator =
-            new TotalsValidator(
-                driver,
-                wait,
-                report,
+            new TotalsValidator(driver, wait, report,
                 _expectationHandler);
 
         _messageValidator =
-            new MessageValidator(
-                driver,
-                wait,
-                report,
+            new MessageValidator(driver, wait, report,
                 _expectationHandler);
 
         _networkHelper =
@@ -182,6 +175,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 Save();
 
                 ValidateAfterSave(document);
+                
             });
 
         // ------------------------------------------------------------
@@ -343,41 +337,95 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
     private void ExecuteApproval(InvoiceDM document)
     {
-        ArgumentNullException.ThrowIfNull(document.Approval);
+        ArgumentNullException.ThrowIfNull(document);
 
-        // ------------------------------------------------------------
-        // Determine approval steps
-        // ------------------------------------------------------------
+        // ================================================================
+        // 1. CREATE → SAVE → VIEW
+        // ================================================================
 
-        var approvalSteps =
-            document.Approval.ApprovalSteps;
+        ExecuteCreate(document);        
 
-        // ------------------------------------------------------------
-        // If ApprovalSteps are not provided, use the simple
-        // ApprovalDM properties.
-        //
-        // This supports:
-        //
-        // ApprovalLevel = 1
-        // Action = Approve
-        //
-        // ------------------------------------------------------------
+        _headerValidator
+                    .ValidateDocumentNumberGenerated();
 
-        if (approvalSteps == null ||
-            approvalSteps.Count == 0)
-        {
-            ExecuteSingleApproval(document);
+        string docNo = _expectationHandler.ReadDocumentNumber();
 
-            return;
-        }
+        // ================================================================
+        // 2. SUBMIT FOR APPROVAL
+        // ================================================================
 
-        // ------------------------------------------------------------
-        // Multi-level approval
-        // ------------------------------------------------------------
+        ExecuteStep(
+            "Submit Invoice for Approval",
+            () =>
+            {
+                _approvalHandler.Submit();
 
-        ExecuteMultiLevelApproval(
-            document,
-            approvalSteps);
+                ValidateAfterSubmit(document);
+            });
+
+        // ================================================================
+        // 3. LOGOUT SUBMITTER
+        // ================================================================
+
+        ExecuteStep(
+            "Logout Submitter",
+            () =>
+            {
+                _loginHelper.Logout();
+                Thread.Sleep(3000); // Wait for logout to complete
+            });
+
+        // ================================================================
+        // 4. LOGIN AS APPROVER
+        // ================================================================
+
+        ExecuteStep(
+            "Login as Approver",
+            () =>
+            {
+                _loginHelper.Login(
+                    Config.ApproverUsername,
+                    Config.ApproverPassword);
+            });
+
+        // ================================================================
+        // 5. OPEN NOTIFICATION → MY APPROVALS
+        // ================================================================
+
+        ExecuteStep(
+            "Open My Approvals",
+            () =>
+            {
+                _approvalNavigationHandler.ClickOnNotification();
+
+                //_approvalNavigationHandler.ClickOnMyApprovals();
+            });
+
+        // ================================================================
+        // 6. FIND AND OPEN TRANSACTION
+        // ================================================================        
+
+        ExecuteStep(
+            $"Open Approval Transaction - {docNo}",
+            () =>
+            {
+                _approvalNavigationHandler
+                    .FindAndOpenApprovalTransaction(
+                        docNo);
+            });
+
+        // ================================================================
+        // 7. APPROVE
+        // ================================================================
+
+        ExecuteStep(
+            "Approve Invoice",
+            () =>
+            {
+                _approvalHandler.Approve();
+
+                ValidateAfterApprove(document);
+            });
     }
 
     // ================================================================

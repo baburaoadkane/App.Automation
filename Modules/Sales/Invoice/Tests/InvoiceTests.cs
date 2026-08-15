@@ -24,7 +24,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // ══════════════════════════════════════════════════════════════════════
 
     // Customer is required Validation 
-    //[Test]
+    [Test]
     [Category(TestCategories.Validation)]
     [Category(TestCategories.Smoke)]
     public void Invoice_Validation_MissingCustomer_Smoke()
@@ -43,7 +43,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     }
 
     // Warehouse is required Validation
-    //[Test]
+    [Test]
     [Category(TestCategories.Validation)]
     [Category(TestCategories.Smoke)]
     public void Invoice_Validation_MissingWarehouse_Smoke()
@@ -66,7 +66,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // VALIDATION - JSON-DRIVEN SCENARIOS [As Many Json Files]
     // ══════════════════════════════════════════════════════════════════════    
 
-    //[Test]
+    [Test]
     [TestCaseSource(nameof(ValidationScenarios))]
     [Category(TestCategories.Validation)]
     public void Base_Invoice_Validation_ValidationMessage(string jsonPath)
@@ -86,7 +86,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // CREATE - programmatic, no JSON file needed
     // ══════════════════════════════════════════════════════════════════════
 
-    //[Test]
+    [Test]
     [Category(TestCategories.Create)]
     [Category(TestCategories.Smoke)]
     public void Invoice_Create_Save_View_SingleLine()
@@ -110,7 +110,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // DIRECT APPROVAL - programmatic, no JSON file needed
     // ══════════════════════════════════════════════════════════════════════
 
-    //[Test]
+    [Test]
     [Category(TestCategories.Direct_Approval)]
     [Category(TestCategories.Smoke)]
     public void Invoice_DirectApproval_SingleLine()
@@ -134,7 +134,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // CREATE - JSON-DRIVEN SCENARIOS [As Many Json Files]
     // ══════════════════════════════════════════════════════════════════════
 
-    //[Test]
+    [Test]
     [TestCaseSource(nameof(CreateScenarios))]
     [Category(TestCategories.Create)]
     public void Base_Invoice_Create_Multiline_ValidateTotal(string jsonPath)
@@ -168,13 +168,38 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
             .Build();
 
         Executor.Execute(data);
-    }    
+    }
+
+
+    // ══════════════════════════════════════════════════════════════════════
+    // CREATE AND APPROVE - programmatic, no JSON file needed
+    // ══════════════════════════════════════════════════════════════════════
+
+    [Test]
+    [Category(TestCategories.Approval)]
+    [Category(TestCategories.Smoke)]
+    public void Invoice_SubmitAndApprove_SingleLine()
+    {
+        var data = InvoiceBuilder
+            .New()
+            .WithCustomer("C0002 | Minnah Elamin")
+            .WithWarehouse("Grand Prime House")
+            .WithReferenceNum("Smoke Test With Approval")
+            .AddLine(
+                barcode: "",
+                item: "I0001 | Screen Protectors"
+            )
+            .AsScenario("Approval")
+            .Build();
+
+        Executor.Execute(data);
+    }
 
     // ══════════════════════════════════════════════════════════════════════
     // APPROVAL - JSON-DRIVEN SCENARIOS
     // ════════════════════════════════════════════
 
-    [Test]
+    //[Test]
     [TestCaseSource(nameof(ApprovalScenarios))]
     [Category(TestCategories.Approval)]
     public void Base_Invoice_Approval(string jsonPath)

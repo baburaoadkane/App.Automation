@@ -71,6 +71,16 @@ namespace App.Automation.Core.Utilities
         /// <summary>Admin password — resolves ${ENV_VAR} tokens from environment.</summary>
         public string AdminPassword => ResolveEnvToken(Get("Credentials:AdminUser:Password"));
 
+        /// <summary>Approver username from config.</summary>
+        public string ApproverUsername =>
+            Get("Credentials:ApproverUser:Username");
+
+        /// <summary>
+        /// Approver password — resolves ${ENV_VAR} tokens from environment.
+        /// </summary>
+        public string ApproverPassword =>
+            ResolveEnvToken(Get("Credentials:ApproverUser:Password"));
+
         /// <summary>Root path for all test data JSON files.</summary>
         public string TestDataRoot => Get("Paths:TestDataRoot");
 

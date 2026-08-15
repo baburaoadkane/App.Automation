@@ -118,14 +118,9 @@ public class InvoiceApprovalHandler : BaseHandler
 
     private void ClickOnButton(string buttonText)
     {
-        By button = By.XPath(
-            $"//span[contains(@class,'dx-vam') and " +
-            $"normalize-space()='{buttonText}']" +
-            $" | " +
-            $"//button[normalize-space()='{buttonText}']"
-        );
-
-        Wait.UntilClickable(button).Click();
+        By button = By.XPath($"//span[normalize-space()='{buttonText}']");
+            //By.XPath($"//span[contains(@class, 'dx-vam') and text()='{buttonText}']");
+         Wait.UntilClickable(button).Click();
     }    
 
     // ================================================================

@@ -1,0 +1,92 @@
+﻿using OpenQA.Selenium;
+
+namespace App.Automation.Core.Utilities
+{
+    public static class ScreenshotHelper
+    {
+        /// <summary>
+        /// Capture a screenshot and save it as a PNG file.
+        /// File name format: {TestName}_{Timestamp}.png
+        /// Returns the full file path of the saved screenshot.
+        /// </summary>
+        public static string Capture(IWebDriver driver, string testName, string outputPath)
+        {
+            try
+            {
+                // Resolve the output path (either project-root-relative or output-dir-relative)
+                string resolvedPath = ResolveOutputPath(outputPath);
+
+                // Ensure output directory exists
+                Directory.CreateDirectory(resolvedPath);
+
+                // Clean test name for valid filename
+                string safeName = string.Join("_", testName.Split(Path.GetInvalidFileNameChars()));
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+                string fileName = $"{safeName}_{timestamp}.png";
+                string fullPath = Path.Combine(resolvedPath, fileName);
+
+                // Take and save screenshot
+                Screenshot screenshot = ((ITakesScreenshot)driver).GetScreenshot();
+                screenshot.SaveAsFile(fullPath);
+
+                return fullPath;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ScreenshotHelper] Failed to capture screenshot: {ex.Message}");
+                return string.Empty;
+            }
+        }
+
+        // ── Private helper: Resolve output path ──────────────────────────────────────────────────────
+
+        /// <summary>
+        /// Resolve output path based on whether it's project-root-relative or output-directory-relative.
+        /// Paths starting with "App.Automation." are treated as project-root-relative.
+        /// All other paths are treated as output-directory-relative (relative to bin output folder).
+        /// </summary>
+        private static string ResolveOutputPath(string outputPath)
+        {
+            // If already absolute, return as-is
+            if (Path.IsPathRooted(outputPath))
+                return outputPath;
+
+            // If path starts with project name (e.g., "App.Automation.TestResults.Screenshots"),
+            // resolve it relative to the project root instead of output directory
+            if (outputPath.StartsWith("App.Automation.", StringComparison.OrdinalIgnoreCase))
+            {
+                return ResolveProjectRootPath(outputPath);
+            }
+
+            // Otherwise, resolve relative to output directory
+            return Path.Combine(AppContext.BaseDirectory, outputPath);
+        }
+
+        /// <summary>
+        /// Resolve a path relative to the project root.
+        /// Project root is determined by going up 3 levels from the output directory
+        /// (bin\Debug\net10.0 or bin\Release\net10.0).
+        /// </summary>
+        private static string ResolveProjectRootPath(string relativePath)
+        {
+            // Get the base directory (e.g., D:\Platform\App.Automation\bin\Debug\net10.0\)
+            string baseDir = AppContext.BaseDirectory;
+
+            // Navigate up the directory structure to find project root
+            // From: bin\Debug\net10.0 (or bin\Release\net10.0)
+            // To:   project root
+            DirectoryInfo? current = new DirectoryInfo(baseDir);
+
+            // Go up 3 levels: net10.0 -> Debug/Release -> bin -> project root
+            for (int i = 0; i < 3 && current?.Parent != null; i++)
+            {
+                current = current.Parent;
+            }
+
+            string projectRoot = current?.FullPath ?? baseDir;
+
+            // Combine project root with the relative path
+            return Path.Combine(projectRoot, relativePath);
+        }
+    }
+}

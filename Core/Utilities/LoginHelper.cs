@@ -41,11 +41,7 @@ namespace App.Automation.Core.Utilities
         public void Logout()
         {
             By ProfileIcon = By.Id("UserProfileMenu");
-            By logoutBtn = By.XPath(
-                "//a[normalize-space()='Log Off'] | " +
-                "//button[normalize-space()='Log Off'] | " +
-                "//a[normalize-space()='Log Off']"
-            );
+            By logoutBtn = By.XPath("//span[normalize-space()='Log Off']");
 
             try
             {

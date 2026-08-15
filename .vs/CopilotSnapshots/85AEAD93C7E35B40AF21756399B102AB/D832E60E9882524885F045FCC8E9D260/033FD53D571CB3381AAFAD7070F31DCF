@@ -1,0 +1,67 @@
+﻿{
+  "Application": {
+    "Name": "Enfinity.ERP.Automation",
+    "Version": "1.0.0",
+    "Environment": "Test"
+  },
+
+  "Browser": {
+    "Type": "Chrome",
+    "Headless": false,
+    "WindowSize": "1920,1080",
+    "ImplicitWait": 30,
+    "ExplicitWait": 30,
+    "PageLoadTimeout": 30
+  },
+
+  "Application_URLs": {
+    "Test": "https://testerp.onenfinity.com/",
+    "Staging": "https://erp-on-enfinity-staging.azurewebsites.net/",
+    "Prod": "https://erp.onenfinity.com/"
+  },
+
+  "Credentials": {
+    "AdminUser": {
+      "Username": "b4u@demo.com",
+      "Password": "123"
+    }
+  },
+
+  "Paths": {
+    "TestDataRoot": "Modules",
+    "ReportsOutput": "Reports",
+    "ScreenshotsOutput": "Reports/Screenshots",
+    "LogsOutput": "Reports/Logs"
+  },
+
+  "Modules": {
+    "Sales": {
+      "Enabled": true,
+      "BaseRoute": "sales"
+    },
+    "Purchase": {
+      "Enabled": true,
+      "BaseRoute": "purchase"
+    },
+    "Inventory": {
+      "Enabled": false,
+      "BaseRoute": "inventory"
+    },
+    "Accounting": {
+      "Enabled": false,
+      "BaseRoute": "accounting"
+    }
+  },
+
+  "Reporting": {
+    "Tool": "ExtentReports",
+    "GenerateHtmlReport": true,
+    "AttachScreenshotOnFailure": true,
+    "AttachScreenshotOnPass": false
+  },
+
+  "Retry": {
+    "MaxAttempts": 2,
+    "DelayBetweenAttemptsMs": 1000
+  }
+}
