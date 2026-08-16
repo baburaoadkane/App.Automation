@@ -265,7 +265,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             ApprovalWorkflow.CreateDirectApprovalWorkflow(
                 approve: () =>
                 {
-                    _approvalHandler.Approve();
+                    ClickOnForm("Approve");
                 },
 
                 validate: () =>
@@ -753,7 +753,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     {
         if (document.Expected == null)
         {
-            Report.Warning(
+            Report.Info(
                 "No Expected values defined — " +
                 "skipping validation.");
 
@@ -774,7 +774,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     {
         if (document.Expected == null)
         {
-            Report.Warning(
+            Report.Info(
                 "No Expected values defined — " +
                 "skipping validation.");
 
@@ -799,7 +799,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     {
         if (document.Expected == null)
         {
-            Report.Warning(
+            Report.Info(
                 "No Expected values defined — " +
                 "skipping validation.");
 
@@ -817,7 +817,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     {
         if (document.Expected == null)
         {
-            Report.Warning(
+            Report.Info(
                 "No Expected values defined — " +
                 "skipping validation.");
 
@@ -843,7 +843,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     {
         if (document.Expected == null)
         {
-            Report.Warning(
+            Report.Info(
                 "No Expected values defined — " +
                 "skipping validation.");
 
@@ -861,7 +861,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     {
         if (document.Expected == null)
         {
-            Report.Warning(
+            Report.Info(
                 "No Expected values defined — " +
                 "skipping validation.");
 

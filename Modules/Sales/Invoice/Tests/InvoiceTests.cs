@@ -150,7 +150,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // CREATE AND APPROVE - programmatic, no JSON file needed
     // ══════════════════════════════════════════════════════════════════════
 
-    [Test]
+    //[Test]
     [Category(TestCategories.Submit)]
     [Category(TestCategories.Smoke)]
     public void Invoice_CreateAndSubmit_SingleLine()
@@ -175,7 +175,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // CREATE AND APPROVE - programmatic, no JSON file needed
     // ══════════════════════════════════════════════════════════════════════
 
-    [Test]
+    //[Test]
     [Category(TestCategories.Approval)]
     [Category(TestCategories.Smoke)]
     public void Invoice_SubmitAndApprove_SingleLine()

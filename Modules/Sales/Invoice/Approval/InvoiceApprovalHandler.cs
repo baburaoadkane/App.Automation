@@ -6,12 +6,15 @@ namespace App.Automation.Modules.Sales.Invoice.Approval;
 
 public class InvoiceApprovalHandler : BaseHandler
 {
+    private readonly AlertHelper _alertHelper;
+
     public InvoiceApprovalHandler(
         IWebDriver driver,
         WaitHelper wait,
         ReportHelper report)
         : base(driver, wait, report)
     {
+        _alertHelper = new AlertHelper(driver, wait);
     }
 
     // ================================================================
@@ -39,18 +42,12 @@ public class InvoiceApprovalHandler : BaseHandler
 
         ClickOnButton("Approve");
 
+        _alertHelper.AcceptPrompt(comments?? "Approved");
+
         WaitForLoader();
 
-        if (!string.IsNullOrWhiteSpace(comments))
-        {
-            Report.Info(
-                $"Approve comment provided: {comments}");
-
-            IAlert alert = Wait.UntilAlertPresent();
-
-            alert.SendKeys(comments);
-            alert.Accept();
-        }
+        Report.Info(
+            $"Approve comment provided: {comments}");
 
         Report.Info("Invoice approved.");
     }
@@ -65,18 +62,13 @@ public class InvoiceApprovalHandler : BaseHandler
 
         ClickOnButton("Reject");
 
+        // JavaScript prompt
+        _alertHelper.AcceptPrompt(comments ?? "Rejected");
+
         WaitForLoader();
 
-        if (!string.IsNullOrWhiteSpace(comments))
-        {
-            Report.Info(
-                $"Reject comment provided: {comments}");
-
-            IAlert alert = Wait.UntilAlertPresent();
-
-            alert.SendKeys(comments);
-            alert.Accept();
-        }        
+        Report.Info(
+            $"Reject comment provided: {comments ?? "Rejected"}");
 
         Report.Info("Invoice rejected.");
     }
@@ -87,22 +79,17 @@ public class InvoiceApprovalHandler : BaseHandler
 
     public void Revise(string? comments = null)
     {
-        Report.Info("Requesting invoice revision.");        
+        Report.Info("Requesting invoice revision.");
 
         ClickOnButton("Revise");
 
+        // JavaScript prompt
+        _alertHelper.AcceptPrompt(comments ?? "Revise");
+
         WaitForLoader();
 
-        if (!string.IsNullOrWhiteSpace(comments))
-        {
-            Report.Info(
-                $"Revision comment provided: {comments}");
-
-            IAlert alert = Wait.UntilAlertPresent();
-
-            alert.SendKeys(comments);
-            alert.Accept();
-        }
+        Report.Info(
+            $"Revision comment provided: {comments ?? "Revise"}");
 
         Report.Info("Invoice sent for revision.");
     }
@@ -132,8 +119,8 @@ public class InvoiceApprovalHandler : BaseHandler
     private void ClickOnButton(string buttonText)
     {
         By button = By.XPath($"//span[contains(@class, 'dx-vam') and text()='{buttonText}']");
+        
         Wait.UntilClickable(button).Click();
-        // By.XPath($"//span[normalize-space()='{buttonText}']");
     }
 
     // ================================================================
