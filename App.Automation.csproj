@@ -38,7 +38,6 @@
 		<Folder Include="Config\" />
 		<Folder Include="Modules\Inventory\" />
 		<Folder Include="Modules\Accounting\" />
-		<Folder Include="Modules\Sales\Invoice\TestData\Create\" />
 		<Folder Include="Modules\Shared\" />
 		<Folder Include="Modules\Purchase\GoodsReceipt\Builders\" />
 		<Folder Include="Modules\Purchase\GoodsReceipt\DataModels\" />

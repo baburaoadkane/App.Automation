@@ -1,0 +1,8 @@
+{
+  "TestDescription": "Invoice_Validation_MissingCustomer",
+  "ScenarioType": "Validation",
+
+  "Expected": {
+    "ValidationMessage": "Currency is required."
+  }
+}

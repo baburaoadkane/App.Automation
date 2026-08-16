@@ -18,16 +18,14 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     // ── JSON folder paths ──────────────────────────────────────────────────
     private const string FolderPath = TestDataFolders.Sales.Invoice;
+    
 
-    // ══════════════════════════════════════════════════════════════════════
-    // VALIDATION — programmatic, no JSON file needed
-    // ══════════════════════════════════════════════════════════════════════
+    #region Validation Scenarios
 
-    // Customer is required Validation 
     [Test]
     [Category(TestCategories.Validation)]
     [Category(TestCategories.Smoke)]
-    public void Invoice_Validation_MissingCustomer_Smoke()
+    public void Invoice_Validate_Smoke_CustomerRequired()
     {
         var data = InvoiceBuilder
             .New()
@@ -42,11 +40,10 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
-    // Warehouse is required Validation
     [Test]
     [Category(TestCategories.Validation)]
     [Category(TestCategories.Smoke)]
-    public void Invoice_Validation_MissingWarehouse_Smoke()
+    public void Invoice_Validate_Smoke_WarehouseRequired()
     {
         var data = InvoiceBuilder
             .New()
@@ -60,16 +57,12 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         };
 
         Executor.Execute(data);
-    }
-
-    // ══════════════════════════════════════════════════════════════════════
-    // VALIDATION - JSON-DRIVEN SCENARIOS [As Many Json Files]
-    // ══════════════════════════════════════════════════════════════════════    
+    }    
 
     [Test]
     [TestCaseSource(nameof(ValidationScenarios))]
     [Category(TestCategories.Validation)]
-    public void Base_Invoice_Validation_ValidationMessage(string jsonPath)
+    public void Base_Invoice_Validate_Json_ValidationMessage(string jsonPath)
     {
         var data = InvoiceBuilder
             .FromJson(jsonPath)
@@ -82,14 +75,14 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
-    // ══════════════════════════════════════════════════════════════════════
-    // CREATE - programmatic, no JSON file needed
-    // ══════════════════════════════════════════════════════════════════════
+    #endregion    
+
+    #region Create Scenarios
 
     [Test]
     [Category(TestCategories.Create)]
     [Category(TestCategories.Smoke)]
-    public void Invoice_Create_Save_View_SingleLine()
+    public void Invoice_Create_Smoke_SingleLine_Successful()
     {
         var data = InvoiceBuilder
             .New()
@@ -106,14 +99,26 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
-    // ══════════════════════════════════════════════════════════════════════
-    // DIRECT APPROVAL - programmatic, no JSON file needed
-    // ══════════════════════════════════════════════════════════════════════
+    [Test]
+    [TestCaseSource(nameof(CreateScenarios))]
+    [Category(TestCategories.Create)]
+    public void Base_Invoice_Create_Json_MultiLine(string jsonPath)
+    {
+        var data = InvoiceBuilder.FromJson(jsonPath).Build();
+
+        Report.Info($"Scenario: {data.TestDescription}");
+
+        Executor.Execute(data);
+    }
+
+    #endregion    
+
+    #region Direct Approval Scenarios
 
     [Test]
     [Category(TestCategories.Direct_Approval)]
     [Category(TestCategories.Smoke)]
-    public void Invoice_DirectApproval_SingleLine()
+    public void Invoice_Approve_Smoke_DirectApproval()
     {
         var data = InvoiceBuilder
             .New()
@@ -130,25 +135,9 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
-    // ══════════════════════════════════════════════════════════════════════
-    // CREATE - JSON-DRIVEN SCENARIOS [As Many Json Files]
-    // ══════════════════════════════════════════════════════════════════════
+    #endregion
 
-    [Test]
-    [TestCaseSource(nameof(CreateScenarios))]
-    [Category(TestCategories.Create)]
-    public void Base_Invoice_Create_Multiline_ValidateTotal(string jsonPath)
-    {
-        var data = InvoiceBuilder.FromJson(jsonPath).Build();
-
-        Report.Info($"Scenario: {data.TestDescription}");
-
-        Executor.Execute(data);
-    }
-
-    // ══════════════════════════════════════════════════════════════════════
-    // CREATE AND APPROVE - programmatic, no JSON file needed
-    // ══════════════════════════════════════════════════════════════════════
+    #region Submit For Approval Scenarios
 
     //[Test]
     [Category(TestCategories.Submit)]
@@ -170,15 +159,14 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
+    #endregion
 
-    // ══════════════════════════════════════════════════════════════════════
-    // CREATE AND APPROVE - programmatic, no JSON file needed
-    // ══════════════════════════════════════════════════════════════════════
+    #region Approval - Scenario Driven
 
     //[Test]
     [Category(TestCategories.Approval)]
     [Category(TestCategories.Smoke)]
-    public void Invoice_SubmitAndApprove_SingleLine()
+    public void Invoice_Approve_Approved()
     {
         var data = InvoiceBuilder
             .New()
@@ -195,14 +183,10 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
-    // ══════════════════════════════════════════════════════════════════════
-    // APPROVAL - JSON-DRIVEN SCENARIOS
-    // ════════════════════════════════════════════
-
     [Test]
     [TestCaseSource(nameof(ApprovalScenarios))]
     [Category(TestCategories.Approval)]
-    public void Base_Invoice_Approval(string jsonPath)
+    public void Base_Invoice_Approve_Json_Approval(string jsonPath)
     {
         var data = InvoiceBuilder
             .FromJson(jsonPath)
@@ -213,6 +197,8 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
         Executor.Execute(data);
     }
+
+    #endregion
 
 
     // ══════════════════════════════════════════════════════════════════════
@@ -251,10 +237,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     //    Executor.Execute(data);
     //}
 
-
-    // ══════════════════════════════════════════════════════════════════════
-    // TEST CASE SOURCES
-    // ══════════════════════════════════════════════════════════════════════
+    #region Test Case Sources
 
     private static IEnumerable<TestCaseData> CreateScenarios()
         => ScenarioFactory.FromFolder(
@@ -275,4 +258,6 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     private static IEnumerable<TestCaseData> NegativeScenarios()
         => ScenarioFactory.FromFolder(
             TestDataFolders.Negative(FolderPath));
+
+    #endregion
 }

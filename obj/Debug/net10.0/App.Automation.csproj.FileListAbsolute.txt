@@ -211,7 +211,6 @@ D:\Platform\App.Automation\obj\Debug\net10.0\App.Automation.pdb
 D:\Platform\App.Automation\obj\Debug\net10.0\App.Automation.genruntimeconfig.cache
 D:\Platform\App.Automation\obj\Debug\net10.0\ref\App.Automation.dll
 D:\Platform\App.Automation\obj\Debug\net10.0\App.Automation.sourcelink.json
-D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Create\Invoice_Create_Save_View_MultiLine_ValidateTotal.json
 D:\Data\App.Automation\bin\Debug\net10.0\testhost.exe
 D:\Data\App.Automation\bin\Debug\net10.0\testhost.dll
 D:\Data\App.Automation\bin\Debug\net10.0\NUnit3.TestAdapter.pdb
@@ -426,3 +425,6 @@ D:\Data\App.Automation\obj\Debug\net10.0\refint\App.Automation.dll
 D:\Data\App.Automation\obj\Debug\net10.0\App.Automation.pdb
 D:\Data\App.Automation\obj\Debug\net10.0\App.Automation.genruntimeconfig.cache
 D:\Data\App.Automation\obj\Debug\net10.0\ref\App.Automation.dll
+D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Create\Invoice_Create_Json_MultiLine_ValidateLineTotal.json
+D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Validation\Invoice_Validate_Json_CustomerRequired.json
+D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Validation\Invoice_Validate_json_WarehouseRequired.json
