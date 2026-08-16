@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "D:\\Platform\\App.Automation\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\approval\\invoiceapprovalhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\approval\\invoiceapprovalhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\utilities\\waithelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\utilities\\waithelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\base\\approvalnavigationhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\base\\approvalnavigationhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,17 +30,17 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "InvoiceExecutor.cs",
               "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "RelativeToolTip": "Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
-              "ViewState": "AgIAAFwBAAAAAAAAAAAYwHYBAABCAAAAAAAAAA==",
+              "ViewState": "AgIAAG8CAAAAAAAAAAAjwAsBAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-14T07:39:15.786Z",
               "IsPinned": true,
@@ -36,16 +48,55 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "InvoiceTests.cs",
               "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
               "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
               "RelativeToolTip": "Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
-              "ViewState": "AgIAALAAAAAAAAAAAAAYwMwAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAHsAAAAAAAAAAAAmwMkAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-14T16:17:46.31Z",
               "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WaitHelper.cs",
+              "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Utilities\\WaitHelper.cs",
+              "RelativeDocumentMoniker": "Core\\Utilities\\WaitHelper.cs",
+              "ToolTip": "D:\\Platform\\App.Automation\\Core\\Utilities\\WaitHelper.cs",
+              "RelativeToolTip": "Core\\Utilities\\WaitHelper.cs",
+              "ViewState": "AgIAAAsBAAAAAAAAAAAqwB8BAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T02:51:24.574Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InvoiceApprovalHandler.cs",
+              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
+              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
+              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
+              "RelativeToolTip": "Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
+              "ViewState": "AgIAAIAAAAAAAAAAAAAswGIAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T02:35:34.147Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ApprovalNavigationHandler.cs",
+              "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Base\\ApprovalNavigationHandler.cs",
+              "RelativeDocumentMoniker": "Core\\Base\\ApprovalNavigationHandler.cs",
+              "ToolTip": "D:\\Platform\\App.Automation\\Core\\Base\\ApprovalNavigationHandler.cs",
+              "RelativeToolTip": "Core\\Base\\ApprovalNavigationHandler.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAADwv2kAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-16T02:25:40.812Z",
               "EditorCaption": ""
             },
             {

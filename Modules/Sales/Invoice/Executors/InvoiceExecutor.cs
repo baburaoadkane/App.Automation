@@ -175,7 +175,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 Save();
 
                 ValidateAfterSave(document);
-                
+
             });
 
         // ------------------------------------------------------------
@@ -343,12 +343,12 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         // 1. CREATE → SAVE → VIEW
         // ================================================================
 
-        ExecuteCreate(document);        
+        ExecuteCreate(document);
 
         _headerValidator
                     .ValidateDocumentNumberGenerated();
 
-        string docNo = _expectationHandler.ReadDocumentNumber();
+        string documentNo = _expectationHandler.ReadDocumentNumber();
 
         // ================================================================
         // 2. SUBMIT FOR APPROVAL
@@ -372,7 +372,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             () =>
             {
                 _loginHelper.Logout();
-                Thread.Sleep(3000); // Wait for logout to complete
+                Thread.Sleep(1000);
             });
 
         // ================================================================
@@ -406,12 +406,12 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         // ================================================================        
 
         ExecuteStep(
-            $"Open Approval Transaction - {docNo}",
+            $"Open Approval Transaction - {documentNo}",
             () =>
             {
                 _approvalNavigationHandler
                     .FindAndOpenApprovalTransaction(
-                        docNo);
+                        documentNo);
             });
 
         // ================================================================

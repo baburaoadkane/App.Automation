@@ -33,13 +33,24 @@ public class InvoiceApprovalHandler : BaseHandler
     // APPROVE
     // ================================================================
 
-    public void Approve()
-    { 
+    public void Approve(string? comments = null)
+    {
         Report.Info("Approving invoice.");
 
         ClickOnButton("Approve");
-        
+
         WaitForLoader();
+
+        if (!string.IsNullOrWhiteSpace(comments))
+        {
+            Report.Info(
+                $"Approve comment provided: {comments}");
+
+            IAlert alert = Wait.UntilAlertPresent();
+
+            alert.SendKeys(comments);
+            alert.Accept();
+        }
 
         Report.Info("Invoice approved.");
     }
@@ -52,19 +63,20 @@ public class InvoiceApprovalHandler : BaseHandler
     {
         Report.Info("Rejecting invoice.");
 
+        ClickOnButton("Reject");
+
+        WaitForLoader();
+
         if (!string.IsNullOrWhiteSpace(comments))
         {
             Report.Info(
                 $"Reject comment provided: {comments}");
 
-            // TODO:
-            // Enter rejection comment here when the
-            // actual ERP comment field/locator is known.
-        }
+            IAlert alert = Wait.UntilAlertPresent();
 
-        ClickOnButton("Reject");
-
-        WaitForLoader();
+            alert.SendKeys(comments);
+            alert.Accept();
+        }        
 
         Report.Info("Invoice rejected.");
     }
@@ -75,21 +87,22 @@ public class InvoiceApprovalHandler : BaseHandler
 
     public void Revise(string? comments = null)
     {
-        Report.Info("Requesting invoice revision.");
+        Report.Info("Requesting invoice revision.");        
+
+        ClickOnButton("Revise");
+
+        WaitForLoader();
 
         if (!string.IsNullOrWhiteSpace(comments))
         {
             Report.Info(
                 $"Revision comment provided: {comments}");
 
-            // TODO:
-            // Enter revision comment here when the
-            // actual ERP comment field/locator is known.
+            IAlert alert = Wait.UntilAlertPresent();
+
+            alert.SendKeys(comments);
+            alert.Accept();
         }
-
-        ClickOnButton("Revise");
-
-        WaitForLoader();
 
         Report.Info("Invoice sent for revision.");
     }
@@ -118,10 +131,10 @@ public class InvoiceApprovalHandler : BaseHandler
 
     private void ClickOnButton(string buttonText)
     {
-        By button = By.XPath($"//span[normalize-space()='{buttonText}']");
-            //By.XPath($"//span[contains(@class, 'dx-vam') and text()='{buttonText}']");
-         Wait.UntilClickable(button).Click();
-    }    
+        By button = By.XPath($"//span[contains(@class, 'dx-vam') and text()='{buttonText}']");
+        Wait.UntilClickable(button).Click();
+        // By.XPath($"//span[normalize-space()='{buttonText}']");
+    }
 
     // ================================================================
     // LOADER

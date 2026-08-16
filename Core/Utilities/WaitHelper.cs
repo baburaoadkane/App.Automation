@@ -282,5 +282,20 @@ namespace App.Automation.Core.Utilities
                 return loaders.All(l => !l.Displayed);
             });
         }
+
+        public IAlert UntilAlertPresent(int? timeoutSeconds = null)
+        {
+            return GetWait(timeoutSeconds).Until(driver =>
+            {
+                try
+                {
+                    return driver.SwitchTo().Alert();
+                }
+                catch (NoAlertPresentException)
+                {
+                    return null;
+                }
+            });
+        }
     }
 }

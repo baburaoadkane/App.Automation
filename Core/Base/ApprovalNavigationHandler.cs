@@ -89,7 +89,8 @@ public class ApprovalNavigationHandler : BaseHandler
             $"Approval transaction found: {documentNo}");
 
             documentSubtitle.Click();
-        }        
+            Wait.WaitForSeconds(2);
+        }
 
         //documentSubtitle.Click();
 

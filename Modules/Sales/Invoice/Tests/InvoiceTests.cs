@@ -150,7 +150,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // CREATE AND APPROVE - programmatic, no JSON file needed
     // ══════════════════════════════════════════════════════════════════════
 
-    //[Test]
+    [Test]
     [Category(TestCategories.Submit)]
     [Category(TestCategories.Smoke)]
     public void Invoice_CreateAndSubmit_SingleLine()
@@ -199,7 +199,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     // APPROVAL - JSON-DRIVEN SCENARIOS
     // ════════════════════════════════════════════
 
-    //[Test]
+    [Test]
     [TestCaseSource(nameof(ApprovalScenarios))]
     [Category(TestCategories.Approval)]
     public void Base_Invoice_Approval(string jsonPath)
@@ -250,7 +250,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     //    Executor.Execute(data);
     //}
-    
+
 
     // ══════════════════════════════════════════════════════════════════════
     // TEST CASE SOURCES
