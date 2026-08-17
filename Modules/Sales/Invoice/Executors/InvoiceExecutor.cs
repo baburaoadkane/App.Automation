@@ -16,9 +16,8 @@ namespace App.Automation.Modules.Sales.Invoice.Executors;
 
 public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 {
-    // ================================================================
-    // HANDLERS
-    // ================================================================
+    #region HANDLERS
+
     private readonly LoginHelper _loginHelper;
     private readonly InvoiceHeaderHandler _headerHandler;
     private readonly InvoiceLineHandler _linesHandler;
@@ -30,24 +29,24 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private readonly InvoiceApprovalHandler _approvalHandler;
     private readonly ApprovalNavigationHandler _approvalNavigationHandler;
 
-    // ================================================================
-    // VALIDATORS
-    // ================================================================
+    #endregion
+
+    #region VALIDATORS
 
     private readonly HeaderValidator _headerValidator;
     private readonly LinesValidator _linesValidator;
     private readonly TotalsValidator _totalsValidator;
     private readonly MessageValidator _messageValidator;
 
-    // ================================================================
-    // NETWORK
-    // ================================================================
+    #endregion
+
+    #region NETWORK
 
     private readonly NetworkHelper _networkHelper;
 
-    // ================================================================
-    // CONSTRUCTOR
-    // ================================================================
+    #endregion
+
+    #region CONSTRUCTOR
 
     public InvoiceExecutor(
         IWebDriver driver,
@@ -104,10 +103,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             new NetworkHelper(driver);
     }
 
-    // ================================================================
-    // ENTRY POINT
-    // ================================================================
+    #endregion
 
+    #region EXECUTOR ENTRY POINT
     public override void Execute(InvoiceDM document)
     {
         ArgumentNullException.ThrowIfNull(document);
@@ -153,11 +151,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                     $"Unknown ScenarioType: {document.ScenarioType}");
         }
     }
+    #endregion
 
-    // ================================================================
-    // CREATE
-    // ================================================================
-
+    #region CREATE EXECUTION
     private void ExecuteCreate(InvoiceDM document)
     {
         NavigateToInvoiceNew();
@@ -242,20 +238,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             });
     }
 
-    // ================================================================
-    // DIRECT APPROVAL
-    //
-    // Workflow:
-    //
-    // Create
-    //   ↓
-    // Save
-    //   ↓
-    // View
-    //   ↓
-    // Direct Approve
-    //
-    // ================================================================
+    #endregion
+
+    #region DIRECT APPROVAL EXECUTION
 
     private void ExecuteDirectApproval(InvoiceDM document)
     {
@@ -279,22 +264,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         engine.Execute(workflow);
     }
 
-    // ================================================================
-    // SUBMIT FOR APPROVAL
-    //
-    // Workflow:
-    //
-    // Create
-    //   ↓
-    // Save
-    //   ↓
-    // View
-    //   ↓
-    // Submit for Approval
-    //
-    // Approver acts separately.
-    //
-    // ================================================================
+    #endregion
+    
+    #region SUBMIT FOR APPROVAL EXECUTION
 
     private void ExecuteSubmitForApproval(InvoiceDM document)
     {
@@ -318,23 +290,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         engine.Execute(workflow);
     }
 
-    // ================================================================
-    // APPROVAL
-    //
-    // Supports:
-    //
-    // Single Level:
-    //     Level 1 → Approve / Reject / Revise
-    //
-    // Multi Level:
-    //     Level 1 → Approve
-    //     Level 2 → Approve
-    //     Level 3 → Approve
-    //
-    // Or any level can Reject / Revise.
-    //
-    // ================================================================
+    #endregion
 
+    #region SUBMITTED REQUEST - APPROVAL EXECUTION
     private void ExecuteApproval(InvoiceDM document)
     {
         ArgumentNullException.ThrowIfNull(document);
@@ -427,11 +385,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 ValidateAfterApprove(document);
             });
     }
-
-    // ================================================================
-    // SINGLE LEVEL APPROVAL
-    // ================================================================
-
+    #endregion
+     
+    #region SINGLE LEVEL APPROVAL EXECUTION
     private void ExecuteSingleApproval(
         InvoiceDM document)
     {
@@ -459,11 +415,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             approvalLevel,
             action);
     }
+    #endregion
 
-    // ================================================================
-    // MULTI LEVEL APPROVAL
-    // ================================================================
-
+    #region MULTI LEVEL APPROVAL EXECUTION
     private void ExecuteMultiLevelApproval(
         InvoiceDM document,
         List<Core.DataModels.Shared.ApprovalStepDM> approvalSteps)
@@ -538,11 +492,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             }
         }
     }
+    #endregion
 
-    // ================================================================
-    // APPROVAL ACTION
-    // ================================================================
-
+    #region APPROVAL ACTIONS
     private void ExecuteApprovalAction(
         InvoiceDM document,
         int approvalLevel,
@@ -557,7 +509,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                     $"Approve Level {approvalLevel}",
                     () =>
                     {
-                        _approvalHandler.Approve();
+                        _approvalHandler.Approve(comments);
 
                         ValidateAfterApprove(document);
                     });
@@ -598,10 +550,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                     $"{approvalLevel}.");
         }
     }
+    #endregion
 
-    // ================================================================
-    // REJECT SCENARIO
-    // ================================================================
+    #region REJECT EXECUTOR 
 
     private void ExecuteReject(InvoiceDM document)
     {
@@ -620,11 +571,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             ApprovalAction.Reject,
             document.Approval.Comments);
     }
+    #endregion
 
-    // ================================================================
-    // REVISE SCENARIO
-    // ================================================================
-
+    #region REVISE EXECUTOR
     private void ExecuteRevise(InvoiceDM document)
     {
         ArgumentNullException.ThrowIfNull(document.Approval);
@@ -642,11 +591,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             ApprovalAction.Revise,
             document.Approval.Comments);
     }
+    #endregion
 
-    // ================================================================
-    // VALIDATION SCENARIO
-    // ================================================================
-
+    #region VALIDATION EXECUTION
     private void ExecuteValidation(InvoiceDM document)
     {
         ExecuteStep(
@@ -682,20 +629,16 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                         document.Expected);
             });
     }
+    #endregion
 
-    // ================================================================
-    // SAVE
-    // ================================================================
-
+    #region SAVE ACTION
     private void Save()
     {
         ClickOnForm("Save");
     }
+    #endregion
 
-    // ================================================================
-    // NAVIGATION
-    // ================================================================
-
+    #region NAVIGATION
     private void NavigateToInvoiceNew()
     {
         ExecuteStep(
@@ -708,7 +651,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 SwitchToOldInterface();
             });
     }
-
     private void NavigateToPendingApproval(
         InvoiceDM document)
     {
@@ -726,11 +668,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         // NavigateToListing("Invoice");
         // OpenPendingApproval(document.DocumentNo);
     }
+    #endregion
 
-    // ================================================================
-    // NETWORK
-    // ================================================================
-
+    #region NETWORK CALL
     private void StartTotalsCapture()
     {
         ExecuteStep(
@@ -743,11 +683,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                     "/SalesInvoice/GetTxnSubtotals");
             });
     }
+    #endregion
 
-    // ================================================================
-    // VALIDATIONS
-    // ================================================================
-
+    #region VALIDATIONS
     private void ValidateAfterSave(
         InvoiceDM document)
     {
@@ -874,9 +812,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             "Revise Message");
     }
 
-    // ================================================================
-    // GENERIC STEP EXECUTION
-    // ================================================================
+    #endregion
+
+    #region STEPS EXECUTION
 
     private void ExecuteStep(
         string stepName,
@@ -898,4 +836,5 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             throw;
         }
     }
+    #endregion
 }
