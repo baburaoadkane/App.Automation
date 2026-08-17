@@ -50,82 +50,24 @@ public class ApprovalNavigationHandler : BaseHandler
         Report.Info("Clicking My Approvals.");
 
         Wait.UntilClickable(MyApprovals).Click();
-    }
-
-    //public void ClickOnMatchDocument(string documentNo)
-    //{
-    //    var documentSubtitle = Wait.UntilVisible(
-    //                By.XPath("//div[contains(@class,'pa-subtitle')]"));
-
-    //    string documentInfo = documentSubtitle.Text;
-
-    //    if (documentInfo.Contains(documentNo))
-    //    {
-    //        documentSubtitle.Click();
-    //    }
-    //}
-
-    public void ClickOnMatchDocument(string documentNo)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(documentNo);
-
-        Report.Info(
-            $"Opening approval transaction: {documentNo}");
-
-        // Store the current window
-        string originalWindow = Driver.CurrentWindowHandle;
-
-        // Store existing windows before clicking
-        var existingWindows = Driver.WindowHandles.ToHashSet();
-
-        var documentSubtitle = Wait.UntilVisible(
-                      By.XPath("//div[contains(@class,'pa-subtitle')]"));
-
-        string documentInfo = documentSubtitle.Text;
-
-        if (documentInfo.Contains(documentNo))
-        {
-            Report.Info(
-            $"Approval transaction found: {documentNo}");
-
-            documentSubtitle.Click();
-            Wait.WaitForSeconds(2);
-        }
-
-        //documentSubtitle.Click();
-
-        // ================================================================
-        // WAIT FOR NEW TAB / WINDOW
-        // ================================================================
-
-        Wait.Until(_ =>
-            Driver.WindowHandles.Count > existingWindows.Count);
-
-        // Find the newly opened window
-        string newWindow = Driver.WindowHandles
-            .First(handle => !existingWindows.Contains(handle));
-
-        // Switch Selenium to the new window
-        Driver.SwitchTo().Window(newWindow);
-
-        Wait.UntilPageLoaded();
-
-        Report.Info(
-            $"Switched to approval transaction window: {documentNo}");
-    }
-
-    // ================================================================
-    // FIND + HOVER + ACTION
-    // ================================================================
+    }    
 
     public void FindAndOpenApprovalTransaction(
         string documentNo)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(documentNo);
+        ArgumentException.ThrowIfNullOrWhiteSpace(documentNo);           
+
+        // Capture windows BEFORE clicking the card
+        var existingWindows =
+            Window.GetCurrentWindows();
+
+        // Find and click the matching approval card
+        Lookup.SelectCard(documentNo);
+
+        // Switch to the newly opened tab/window
+        Window.SwitchToNewWindow(existingWindows);
 
         Report.Info(
-            $"Finding approval transaction: {documentNo}");
-
-        ClickOnMatchDocument(documentNo);
+            $"Switched to approval transaction window: {documentNo}");
     }
 }

@@ -12,9 +12,10 @@ namespace App.Automation.Core.Base
         // ── Core dependencies ──────────────────────────────────────────────────
         protected readonly IWebDriver Driver;
         protected readonly WaitHelper Wait;
-        protected readonly ConfigReader Config = ConfigReader.Instance;
         protected readonly ReportHelper Report;
-
+        protected readonly LookupHelper Lookup;
+        protected readonly WindowHelper Window;
+        protected readonly ConfigReader Config = ConfigReader.Instance;     
         private readonly Actions _actions;
 
         // ── Constructor ────────────────────────────────────────────────────────
@@ -23,6 +24,8 @@ namespace App.Automation.Core.Base
             Driver = driver ?? throw new ArgumentNullException(nameof(driver));
             Wait = wait ?? throw new ArgumentNullException(nameof(wait));
             Report = report ?? throw new ArgumentNullException(nameof(report));
+            Lookup = new LookupHelper(Driver, Wait, Report);
+            Window = new WindowHelper(Driver, Wait, Report);
             _actions = new Actions(driver);
         }
 

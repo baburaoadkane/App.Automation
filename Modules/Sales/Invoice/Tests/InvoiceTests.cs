@@ -163,10 +163,10 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Approval - Scenario Driven
 
-    //[Test]
+    [Test]
     [Category(TestCategories.Approval)]
     [Category(TestCategories.Smoke)]
-    public void Invoice_Approve_Approved()
+    public void Invoice_Approve_Smoke_SingleLine_Approval()
     {
         var data = InvoiceBuilder
             .New()
