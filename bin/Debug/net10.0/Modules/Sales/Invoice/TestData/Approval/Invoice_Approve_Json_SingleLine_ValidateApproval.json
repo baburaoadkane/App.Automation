@@ -1,4 +1,4 @@
-﻿{
+{
   "TestDescription": "Invoice_Approve_SingleLine_ValidateApproval",
   "ScenarioType": "Approval",
   "RequiresApproval": true,
@@ -40,7 +40,7 @@
 
   "Header": {
     "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "REF-001",
+    "ReferenceNum": "Approval Test",
     "Warehouse": "Grand Prime House"
   },
 
@@ -56,16 +56,15 @@
   ],
 
   "Approval": {
-    "WorkflowType": "SubmitForApproval",
     "Action": "Approve",
-    "ApprovalLevel": 1
+    "ApprovalLevel": 1,
+    "Comments": "Approval Level 1"
   },
 
   "Expected": {
-    "Status": "Active",
-
     "Messages": {
-      "OnSave": "Invoice created successfully!"
+      "OnSave": "Invoice created successfully!",
+      "OnSubmit": "Workflow submitted successfully!"
     },
 
     "Totals": {

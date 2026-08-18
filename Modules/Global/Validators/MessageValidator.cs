@@ -253,6 +253,7 @@ public class MessageValidator : BaseValidator
             if (actual.Contains(expectedMessage, StringComparison.OrdinalIgnoreCase))
             {
                 Report.Pass($"✓ {context} matched.");
+                Report.Pass($"✗ Expected: '{expectedMessage}', Actual: '{actual}'");
             }
             else
             {

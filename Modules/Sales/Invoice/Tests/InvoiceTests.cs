@@ -138,7 +138,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Submit For Approval Scenarios
 
-    //[Test]
+    [Test]
     [Category(TestCategories.Submit)]
     [Category(TestCategories.Smoke)]
     public void Invoice_CreateAndSubmit_SingleLine()
@@ -162,7 +162,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Approval - Scenario Driven
 
-    //[Test]
+    [Test]
     [Category(TestCategories.Approval)]
     [Category(TestCategories.Smoke)]
     public void Invoice_Approve_Smoke_SingleLine_Approval()
@@ -200,7 +200,6 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     #endregion
 
     #region Test Case Sources
-
     private static IEnumerable<TestCaseData> CreateScenarios()
         => ScenarioFactory.FromFolder(
             TestDataFolders.Create(FolderPath));
@@ -212,14 +211,5 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     private static IEnumerable<TestCaseData> ValidationScenarios()
         => ScenarioFactory.FromFolder(
             TestDataFolders.Validation(FolderPath));
-
-    private static IEnumerable<TestCaseData> EditScenarios()
-        => ScenarioFactory.FromFolder(
-            TestDataFolders.Edit(FolderPath));
-
-    private static IEnumerable<TestCaseData> NegativeScenarios()
-        => ScenarioFactory.FromFolder(
-            TestDataFolders.Negative(FolderPath));
-
     #endregion
 }

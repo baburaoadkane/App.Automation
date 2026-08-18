@@ -220,18 +220,18 @@ public class InvoiceBuilder
     /// Sets RequiresApproval = true and ScenarioType = "Approval".
     /// Initializes the Approval property with default ApprovalAction.Approve.
     /// </summary>
-    public InvoiceBuilder WithApproval()
-    {
-        _model.RequiresApproval = true;
-        _model.ScenarioType = "Approval";
-        _model.Approval = new ApprovalDM
-        {
-            ApprovalLevel = 1,
-            Action = ApprovalAction.Approve,
-            Approver = null
-        };
-        return this;
-    }
+    //public InvoiceBuilder WithApproval()
+    //{
+    //    _model.RequiresApproval = true;
+    //    _model.ScenarioType = "Approval";
+    //    _model.Approval = new ApprovalDM
+    //    {
+    //        ApprovalLevel = 1,
+    //        Action = ApprovalAction.Approve,
+    //        Approver = null
+    //    };
+    //    return this;
+    //}
 
     /// <summary>Override the scenario type directly.</summary>
     public InvoiceBuilder AsScenario(string scenarioType)

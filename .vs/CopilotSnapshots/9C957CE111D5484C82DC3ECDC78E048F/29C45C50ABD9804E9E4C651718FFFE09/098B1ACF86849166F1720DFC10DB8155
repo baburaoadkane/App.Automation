@@ -10,8 +10,7 @@ namespace App.Automation.Core.Utilities
             PropertyNameCaseInsensitive = true,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             ReadCommentHandling = JsonCommentHandling.Skip,
-            AllowTrailingCommas = true,
-            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
+            AllowTrailingCommas = true
         };
 
         // ── Load a single file ─────────────────────────────────────────────────

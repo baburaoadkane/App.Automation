@@ -1,5 +1,5 @@
-﻿{
-  "TestDescription": "Invoice_Approve_MultiLine_ValidateApproval",
+{
+  "TestDescription": "Invoice_Approve_SingleLine_ValidateApproval",
   "ScenarioType": "Approval",
   "RequiresApproval": true,
 
@@ -40,13 +40,8 @@
 
   "Header": {
     "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "REF-001",
+    "ReferenceNum": "Approval Test",
     "Warehouse": "Grand Prime House"
-  },
-
-  "Discount": {
-    "DiscountInPercent": 0,
-    "DiscountValue": 0
   },
 
   "Lines": [
@@ -60,48 +55,16 @@
     }
   ],
 
-  "Charges": {
-    "Items": [
-      {
-        "ChargeType": "Freight Charges",
-        "Account": "42300 | Freight Charges Income",
-        "AmountFC": 10.000
-      }
-    ]
-  },
-
-  "Payments": {
-    "Entries": [
-      {
-        "PaymentMode": "Cash",
-        "Currency": "KWD",
-        "AmountFC": 50.000
-      }
-    ]
-  },
-
-  "Others": {
-    "PaymentTerm": "Net 30",
-    "ChequeNum": "584584",
-    "ContactPersonName": "Minnah Elamin",
-    "ContactPersonMobile": "9021546225",
-    "ContactPersonEmail": "minnah.elamin@example.com",
-    "BillingAddress": "Office 123, Grand Prime House, Kuwait City",
-    "ShippingAddress": "Office 123, Grand Prime House, Kuwait City",
-    "Remarks": "OK"
-  },
-
   "Approval": {
-    "WorkflowType": "SubmitForApproval",
     "Action": "Approve",
-    "ApprovalLevel": 1
+    "ApprovalLevel": 1,
+    "Comments": "Approval Level 1"
   },
 
   "Expected": {
-    "Status": "Active",
-
     "Messages": {
-      "OnSave": "Invoice created successfully!"
+      "OnSave": "Invoice created successfully!",
+      "OnSubmit": "Workflow submitted successfully!"
     },
 
     "Totals": {
