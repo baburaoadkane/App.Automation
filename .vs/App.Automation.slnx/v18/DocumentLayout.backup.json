@@ -7,20 +7,12 @@
       "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\base\\approvalnavigationhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\base\\approvalnavigationhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\utilities\\lookuphelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\utilities\\lookuphelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\core\\base\\basehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:core\\base\\basehandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,7 +26,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "InvoiceExecutor.cs",
               "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
@@ -54,7 +46,7 @@
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
               "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
               "RelativeToolTip": "Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
-              "ViewState": "AgIAAHMAAAAAAAAAAAAgwKgAAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwKMAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-14T16:17:46.31Z",
               "IsPinned": true,
@@ -62,41 +54,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "LookupHelper.cs",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Utilities\\LookupHelper.cs",
-              "RelativeDocumentMoniker": "Core\\Utilities\\LookupHelper.cs",
-              "ToolTip": "D:\\Platform\\App.Automation\\Core\\Utilities\\LookupHelper.cs",
-              "RelativeToolTip": "Core\\Utilities\\LookupHelper.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAEwBwAAAAbAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-17T15:08:44.751Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "BaseHandler.cs",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Base\\BaseHandler.cs",
-              "RelativeDocumentMoniker": "Core\\Base\\BaseHandler.cs",
-              "ToolTip": "D:\\Platform\\App.Automation\\Core\\Base\\BaseHandler.cs",
-              "RelativeToolTip": "Core\\Base\\BaseHandler.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAAAwBwAAAA8AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-17T16:56:41.927Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "ApprovalNavigationHandler.cs",
               "DocumentMoniker": "D:\\Platform\\App.Automation\\Core\\Base\\ApprovalNavigationHandler.cs",
               "RelativeDocumentMoniker": "Core\\Base\\ApprovalNavigationHandler.cs",
               "ToolTip": "D:\\Platform\\App.Automation\\Core\\Base\\ApprovalNavigationHandler.cs",
               "RelativeToolTip": "Core\\Base\\ApprovalNavigationHandler.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAywIcAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAswDkAAAA+AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-17T16:57:52.106Z",
               "EditorCaption": ""

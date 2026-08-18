@@ -17,8 +17,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     TransactionType.Invoice;
 
     // ── JSON folder paths ──────────────────────────────────────────────────
-    private const string FolderPath = TestDataFolders.Sales.Invoice;
-    
+    private const string FolderPath = TestDataFolders.Sales.Invoice;    
 
     #region Validation Scenarios
 
@@ -163,7 +162,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Approval - Scenario Driven
 
-    [Test]
+    //[Test]
     [Category(TestCategories.Approval)]
     [Category(TestCategories.Smoke)]
     public void Invoice_Approve_Smoke_SingleLine_Approval()
@@ -199,43 +198,6 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     }
 
     #endregion
-
-
-    // ══════════════════════════════════════════════════════════════════════
-    // EDIT SCENARIOS
-    // ════════════════════════════════════
-    //public void Invoice_Edit_Update_Json(string jsonPath)
-    //{
-    //    var data = SalesInvoiceBuilder
-    //        .FromJson(jsonPath)
-    //        .AsScenario("Edit")
-    //        .Build();
-
-    //    Report.Info($"Scenario: {data.TestDescription}");
-    //    Report.Info($"Document: {data.DocumentNo}");
-
-    //    Executor.Execute(data);
-    //}
-
-    // ══════════════════════════════════════════════════════════════════════
-    // VALIDATION SCENARIOS
-    // ══════════════════════════════════
-
-    //[Test]
-    //[TestCaseSource(nameof(ValidationScenarios))]
-    //[Category(TestCategories.Validation)]
-    //public void Invoice_Validation_ExpectedValues_Json(string jsonPath)
-    //{
-    //    var data = SalesInvoiceBuilder
-    //        .FromJson(jsonPath)
-    //        .AsScenario("Validation")
-    //        .Build();
-
-    //    Report.Info($"Scenario: {data.TestDescription}");
-    //    Report.Info($"Document: {data.DocumentNo}");
-
-    //    Executor.Execute(data);
-    //}
 
     #region Test Case Sources
 

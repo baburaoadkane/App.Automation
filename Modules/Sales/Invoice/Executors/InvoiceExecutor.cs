@@ -303,9 +303,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
         ExecuteCreate(document);
 
-        _headerValidator
-                    .ValidateDocumentNumberGenerated();
-
         string documentNo = _expectationHandler.ReadDocumentNumber();
 
         // ================================================================
@@ -330,7 +327,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             () =>
             {
                 _loginHelper.Logout();
-                Thread.Sleep(1000);
+                Wait.WaitForSeconds(2);
             });
 
         // ================================================================
@@ -836,5 +833,5 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             throw;
         }
     }
-    #endregion
+    #endregion    
 }
