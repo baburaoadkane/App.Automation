@@ -430,3 +430,4 @@ D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Vali
 D:\Data\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Create\Invoice_Create_Json_MultiLine_ValidateLineTotal.json
 D:\Data\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Validation\Invoice_Validate_Json_CustomerRequired.json
 D:\Data\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Validation\Invoice_Validate_json_WarehouseRequired.json
+D:\Data\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Approve_Json_MultiLine_ValidateApproval.json

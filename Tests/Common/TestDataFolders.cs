@@ -24,7 +24,7 @@
         }
 
         public static string Create(string root) => $"{root}/Create";
-        public static string Approval(string root) => $"{root}/Approve";
+        public static string Approval(string root) => $"{root}/Approval";
         public static string Validation(string root) => $"{root}/Validation";
         public static string Edit(string root) => $"{root}/Edit";
         public static string Negative(string root) => $"{root}/Negative";

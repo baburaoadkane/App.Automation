@@ -373,18 +373,25 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         // 7. APPROVE
         // ================================================================
 
-        ExecuteStep(
-            "Approve Invoice",
-            () =>
-            {
-                _approvalHandler.Approve();
+        //ExecuteStep(
+        //    "Approve Invoice",
+        //    () =>
+        //    {
+        //        _approvalHandler.Approve();
 
-                ValidateAfterApprove(document);
-            });
+        //        ValidateAfterApprove(document);
+        //    });
+
+        // ================================================================
+        // 7. EXECUTE APPROVAL ACTION
+        // ================================================================
+
+        ExecuteSingleApproval(document);
     }
     #endregion
-     
+
     #region SINGLE LEVEL APPROVAL EXECUTION
+
     private void ExecuteSingleApproval(
         InvoiceDM document)
     {
@@ -398,8 +405,15 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             approvalLevel = 1;
         }
 
-        var action =
+        ApprovalAction action =
             document.Approval.Action;
+
+        if (action == ApprovalAction.None)
+        {
+            throw new ArgumentException(
+                "Approval action must be configured for " +
+                "a single-level approval scenario.");
+        }
 
         Report.Info(
             $"Approval Level: {approvalLevel}");
@@ -410,8 +424,10 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         ExecuteApprovalAction(
             document,
             approvalLevel,
-            action);
+            action,
+            document.Approval.Comments);
     }
+
     #endregion
 
     #region MULTI LEVEL APPROVAL EXECUTION
