@@ -16,16 +16,15 @@ public class ApprovalStepDM
     public string? Approver { get; set; }
 
     /// <summary>
+    /// Password for the approver.
+    /// </summary>
+    public string? Password { get; set; }
+
+    /// <summary>
     /// Action to perform at this approval level.
     /// </summary>
     public ApprovalAction Action { get; set; }
-        = ApprovalAction.None;
-
-    /// <summary>
-    /// Delegated approver.
-    /// Used when Action = Delegate.
-    /// </summary>
-    public string? DelegatedApprover { get; set; }
+        = ApprovalAction.None;    
 
     /// <summary>
     /// Comments for Reject/Revise/other approval actions.

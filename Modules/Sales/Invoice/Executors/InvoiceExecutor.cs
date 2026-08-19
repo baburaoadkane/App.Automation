@@ -131,12 +131,18 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 break;
 
             case "SUBMIT":
-                ExecuteSubmitForApproval(document);
+                if(document.TxnParameter?.EnableApprovalWorkflow == true)
+                {
+                    ExecuteSubmitForApproval(document);
+                }
                 break;
 
             case "APPROVAL":
-                ExecuteApproval(document);
-                break;
+                if (document.TxnParameter?.EnableApprovalWorkflow == true)
+                {
+                    ExecuteApproval(document);
+                }
+                break;     
 
             case "REJECT":
                 ExecuteReject(document);
@@ -156,11 +162,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     #region CREATE EXECUTION
     private void ExecuteCreate(InvoiceDM document)
     {
-        NavigateToInvoiceNew();
-
-        // ------------------------------------------------------------
-        // HEADER
-        // ------------------------------------------------------------
+        NavigateToInvoice();
 
         ExecuteStep(
             "Fill Header",
@@ -173,20 +175,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 ValidateAfterSave(document);
 
             });
-
-        // ------------------------------------------------------------
-        // SECTIONS
-        //
-        // InvoiceSections defines:
-        //     Lines
-        //     Discount
-        //     Charges
-        //     Payments
-        //     Others
-        //
-        // SectionEngine automatically saves after every section
-        // because RequiresSave = true.
-        // ------------------------------------------------------------
 
         var sections =
             InvoiceSections.Create(
@@ -296,10 +284,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private void ExecuteApproval(InvoiceDM document)
     {
         ArgumentNullException.ThrowIfNull(document);
-
-        // ================================================================
-        // 1. CREATE → SAVE → VIEW
-        // ================================================================
+        ArgumentNullException.ThrowIfNull(document.Approval);
 
         ExecuteCreate(document);
 
@@ -353,7 +338,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             {
                 _approvalNavigationHandler.ClickOnNotification();
 
-                //_approvalNavigationHandler.ClickOnMyApprovals();
             });
 
         // ================================================================
@@ -368,19 +352,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                     .FindAndOpenApprovalTransaction(
                         documentNo);
             });
-
-        // ================================================================
-        // 7. APPROVE
-        // ================================================================
-
-        //ExecuteStep(
-        //    "Approve Invoice",
-        //    () =>
-        //    {
-        //        _approvalHandler.Approve();
-
-        //        ValidateAfterApprove(document);
-        //    });
 
         // ================================================================
         // 7. EXECUTE APPROVAL ACTION
@@ -566,7 +537,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     #endregion
 
     #region REJECT EXECUTOR 
-
     private void ExecuteReject(InvoiceDM document)
     {
         ArgumentNullException.ThrowIfNull(document.Approval);
@@ -652,7 +622,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     #endregion
 
     #region NAVIGATION
-    private void NavigateToInvoiceNew()
+    private void NavigateToInvoice()
     {
         ExecuteStep(
             "Navigate to Sales Invoice",

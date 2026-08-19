@@ -1,7 +1,6 @@
 {
   "TestDescription": "Invoice_Approve_SingleLine_ValidateApproval",
   "ScenarioType": "Approval",
-  "RequiresApproval": true,
 
   "AppPreference": {
     "IsAllowMultiCurrencyInTxn": false,
@@ -33,7 +32,7 @@
     "AvoidCostingOnApproval": false,
     "InvoiceAsPerPickingOrder": false,
     "StoreTransferAsPerPickingOrder": false,
-    "EnableApprovalWorkflow": true,
+    "EnableApprovalWorkflow": false,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
   },

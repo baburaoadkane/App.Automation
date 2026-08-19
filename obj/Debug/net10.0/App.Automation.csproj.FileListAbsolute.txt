@@ -15,8 +15,6 @@ D:\Platform\App.Automation\bin\Debug\net10.0\nunit.engine.core.dll
 D:\Platform\App.Automation\bin\Debug\net10.0\testcentric.engine.metadata.dll
 D:\Platform\App.Automation\bin\Debug\net10.0\NUnit3.TestAdapter.dll
 D:\Platform\App.Automation\bin\Debug\net10.0\Config\appsettings.json
-D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Approve_Json_SingleLine_ValidateApproval.json
-D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Reject_Json_SingleLine_ValidateReject.json
 D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Create\Invoice_Create_Json_MultiLine_ValidateLineTotal.json
 D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Validation\Invoice_Validate_Json_CustomerRequired.json
 D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Validation\Invoice_Validate_json_WarehouseRequired.json
@@ -216,7 +214,6 @@ D:\Platform\App.Automation\obj\Debug\net10.0\refint\App.Automation.dll
 D:\Platform\App.Automation\obj\Debug\net10.0\App.Automation.pdb
 D:\Platform\App.Automation\obj\Debug\net10.0\App.Automation.genruntimeconfig.cache
 D:\Platform\App.Automation\obj\Debug\net10.0\ref\App.Automation.dll
-D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Revise_Json_SingleLine_ValidateRevise.json
 D:\Data\App.Automation\bin\Debug\net10.0\testhost.dll
 D:\Data\App.Automation\bin\Debug\net10.0\testhost.exe
 D:\Data\App.Automation\bin\Debug\net10.0\NUnit3.TestAdapter.pdb
@@ -436,3 +433,7 @@ D:\Data\App.Automation\obj\Debug\net10.0\refint\App.Automation.dll
 D:\Data\App.Automation\obj\Debug\net10.0\App.Automation.pdb
 D:\Data\App.Automation\obj\Debug\net10.0\App.Automation.genruntimeconfig.cache
 D:\Data\App.Automation\obj\Debug\net10.0\ref\App.Automation.dll
+D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Approval_Json_SingleLine_ValidateApprove.json
+D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Approval_Json_SingleLine_ValidateReject.json
+D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Approval_Json_SingleLine_ValidateRevise.json
+D:\Platform\App.Automation\bin\Debug\net10.0\Modules\Sales\Invoice\TestData\Approval\Invoice_Approval_Json_MultiLevel_ValidateApprove.json

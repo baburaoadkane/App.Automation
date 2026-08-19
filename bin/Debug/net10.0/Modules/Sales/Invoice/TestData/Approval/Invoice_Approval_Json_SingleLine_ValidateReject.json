@@ -1,7 +1,6 @@
 {
   "TestDescription": "Invoice_Reject_SingleLine_ValidateReject",
-  "ScenarioType": "Approval",
-  "RequiresApproval": true,
+  "ScenarioType": "Approve",
 
   "AppPreference": {
     "IsAllowMultiCurrencyInTxn": false,
@@ -33,7 +32,7 @@
     "AvoidCostingOnApproval": false,
     "InvoiceAsPerPickingOrder": false,
     "StoreTransferAsPerPickingOrder": false,
-    "EnableApprovalWorkflow": true,
+    "EnableApprovalWorkflow": false,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
   },
@@ -56,9 +55,9 @@
   ],
 
   "Approval": {
-    "Action": "Revise",
+    "Action": "Reject",
     "ApprovalLevel": 1,
-    "Comments": "Revised Level 1"
+    "Comments": "Rejected Level 1"
   },
 
   "Expected": {

@@ -1,5 +1,5 @@
 {
-  "TestDescription": "Invoice_Approve_SingleLine_ValidateApproval",
+  "TestDescription": "Invoice_Approval_MultiLevel_ValidateApprove",
   "ScenarioType": "Approval",
 
   "AppPreference": {
@@ -32,7 +32,7 @@
     "AvoidCostingOnApproval": false,
     "InvoiceAsPerPickingOrder": false,
     "StoreTransferAsPerPickingOrder": false,
-    "EnableApprovalWorkflow": false,
+    "EnableApprovalWorkflow": true,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
   },
@@ -55,9 +55,22 @@
   ],
 
   "Approval": {
-    "Action": "Approve",
-    "ApprovalLevel": 1,
-    "Comments": "Approval Level 1"
+    "WorkflowType": "MultipleLevelApproval",
+
+    "ApprovalSteps": [
+      {
+        "Level": 1,
+        "Approver": "habid@grand.com",
+        "Password": "123",
+        "Action": "Approve"
+      },
+      {
+        "Level": 2,
+        "Approver": "b4u@demo.com",
+        "Password": "123",
+        "Action": "Approve"
+      }
+    ]
   },
 
   "Expected": {
