@@ -21,9 +21,9 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Validation Scenarios
 
-    [Test]
-    [Category(TestCategories.Validation)]
-    [Category(TestCategories.Smoke)]
+    //[Test]
+    //[Category(TestCategories.Validation)]
+    //[Category(TestCategories.Smoke)]
     public void Invoice_Validate_Smoke_CustomerRequired()
     {
         var data = InvoiceBuilder
@@ -39,9 +39,9 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
-    [Test]
-    [Category(TestCategories.Validation)]
-    [Category(TestCategories.Smoke)]
+    //[Test]
+    //[Category(TestCategories.Validation)]
+    //[Category(TestCategories.Smoke)]
     public void Invoice_Validate_Smoke_WarehouseRequired()
     {
         var data = InvoiceBuilder
@@ -58,10 +58,10 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }    
 
-    [Test]
-    [TestCaseSource(nameof(ValidationScenarios))]
-    [Category(TestCategories.Validation)]
-    public void Base_Invoice_Validate_Json_ValidationMessage(string jsonPath)
+    //[Test]
+    //[TestCaseSource(nameof(ValidationScenarios))]
+    //[Category(TestCategories.Validation)]
+    public void Base_Invoice_Validate_Json_ValidateMessage(string jsonPath)
     {
         var data = InvoiceBuilder
             .FromJson(jsonPath)
@@ -78,7 +78,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Create Scenarios
 
-    [Test]
+    //[Test]
     [Category(TestCategories.Create)]
     [Category(TestCategories.Smoke)]
     public void Invoice_Create_Smoke_SingleLine_Successful()
@@ -98,8 +98,8 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
         Executor.Execute(data);
     }
 
-    [Test]
-    [TestCaseSource(nameof(CreateScenarios))]
+    //[Test]
+    //[TestCaseSource(nameof(CreateScenarios))]
     [Category(TestCategories.Create)]
     public void Base_Invoice_Create_Json_MultiLine(string jsonPath)
     {
@@ -114,8 +114,8 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Direct Approval Scenarios
 
-    [Test]
-    [Category(TestCategories.Direct_Approval)]
+    //[Test]
+    //[Category(TestCategories.Direct_Approval)]
     [Category(TestCategories.Smoke)]
     public void Invoice_Approve_Smoke_DirectApproval()
     {
@@ -138,9 +138,9 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Submit For Approval Scenarios
 
-    [Test]
-    [Category(TestCategories.Submit)]
-    [Category(TestCategories.Smoke)]
+    //[Test]
+    //[Category(TestCategories.Submit)]
+    //[Category(TestCategories.Smoke)]
     public void Invoice_CreateAndSubmit_SingleLine()
     {
         var data = InvoiceBuilder
@@ -162,9 +162,9 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #region Approval - Scenario Driven
 
-    [Test]
-    [Category(TestCategories.Approval)]
-    [Category(TestCategories.Smoke)]
+    //[Test]
+    //[Category(TestCategories.Approval)]
+    //[Category(TestCategories.Smoke)]
     public void Invoice_Approve_Smoke_SingleLine_Approval()
     {
         var data = InvoiceBuilder

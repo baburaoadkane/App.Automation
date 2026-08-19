@@ -60,6 +60,8 @@ public class InvoiceApprovalHandler : BaseHandler
     {
         Report.Info("Rejecting invoice.");
 
+        OpenKebabMenu();
+
         ClickOnButton("Reject");
 
         // JavaScript prompt
@@ -80,6 +82,8 @@ public class InvoiceApprovalHandler : BaseHandler
     public void Revise(string? comments = null)
     {
         Report.Info("Requesting invoice revision.");
+
+        OpenKebabMenu();
 
         ClickOnButton("Revise");
 
@@ -121,6 +125,12 @@ public class InvoiceApprovalHandler : BaseHandler
         By button = By.XPath($"//span[contains(@class, 'dx-vam') and text()='{buttonText}']");
         
         Wait.UntilClickable(button).Click();
+    }
+
+    private void OpenKebabMenu()
+    {
+        By kebabMenu = By.XPath("//img[contains(@id, 'MainMenu_DXI') and @alt='...']");
+        Wait.UntilClickable(kebabMenu).Click();
     }
 
     // ================================================================
