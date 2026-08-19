@@ -1,26 +1,30 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Platform\\App.Automation\\",
+  "WorkspaceRootPath": "D:\\Data\\App.Automation\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\testdata\\approval\\invoice_revise_json_singleline_validaterevise.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\testdata\\approval\\invoice_revise_json_singleline_validaterevise.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\data\\app.automation\\modules\\sales\\invoice\\testdata\\approval\\invoice_approval_json_singleline_validaterevise.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\testdata\\approval\\invoice_approval_json_singleline_validaterevise.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\testdata\\approval\\invoice_reject_json_singleline_validatereject.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\testdata\\approval\\invoice_reject_json_singleline_validatereject.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\data\\app.automation\\modules\\sales\\invoice\\testdata\\approval\\invoice_approval_json_singleline_validatereject.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\testdata\\approval\\invoice_approval_json_singleline_validatereject.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\approval\\invoiceapprovalhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\data\\app.automation\\modules\\sales\\invoice\\testdata\\approval\\invoice_approval_json_singleline_validateapprove.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\testdata\\approval\\invoice_approval_json_singleline_validateapprove.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\data\\app.automation\\modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\data\\app.automation\\modules\\sales\\invoice\\approval\\invoiceapprovalhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\approval\\invoiceapprovalhandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\data\\app.automation\\modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\executors\\invoiceexecutor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|d:\\platform\\app.automation\\modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9F7E6840-FCE2-54B0-3E91-95C5D73C2F0B}|App.Automation.csproj|solutionrelative:modules\\sales\\invoice\\tests\\invoicetests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -34,13 +38,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "InvoiceTests.cs",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
+              "DocumentMoniker": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
-              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
+              "ToolTip": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
               "RelativeToolTip": "Modules\\Sales\\Invoice\\Tests\\InvoiceTests.cs",
-              "ViewState": "AgIAAK8AAAAAAAAAAAAkwMQAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAAwKIAAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-18T11:47:19.291Z",
               "IsPinned": true,
@@ -48,43 +52,63 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "InvoiceExecutor.cs",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
+              "DocumentMoniker": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
-              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
+              "ToolTip": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "RelativeToolTip": "Modules\\Sales\\Invoice\\Executors\\InvoiceExecutor.cs",
               "ViewState": "AgIAABEDAAAAAAAAAAAQwCgDAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-08-14T07:39:15.786Z",
-              "IsPinned": true,
-              "EditorCaption": ""
+              "IsPinned": true
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "Invoice_Revise_Json_SingleLine_ValidateRevise.json",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Revise_Json_SingleLine_ValidateRevise.json",
-              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Revise_Json_SingleLine_ValidateRevise.json",
-              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Revise_Json_SingleLine_ValidateRevise.json",
-              "RelativeToolTip": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Revise_Json_SingleLine_ValidateRevise.json",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAAUAAAAUAAAAAAAAAA==",
+              "Title": "Invoice_Approval_Json_SingleLine_ValidateRevise.json",
+              "DocumentMoniker": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateRevise.json",
+              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateRevise.json",
+              "ToolTip": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateRevise.json",
+              "RelativeToolTip": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateRevise.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-19T02:52:31.611Z",
+              "WhenOpened": "2026-08-19T09:40:07.207Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Invoice_Reject_Json_SingleLine_ValidateReject.json",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Reject_Json_SingleLine_ValidateReject.json",
-              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Reject_Json_SingleLine_ValidateReject.json",
-              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Reject_Json_SingleLine_ValidateReject.json",
-              "RelativeToolTip": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Reject_Json_SingleLine_ValidateReject.json",
-              "ViewState": "AgIAACUAAAAAAAAAAAAiwEsAAAABAAAAAAAAAA==",
+              "Title": "Invoice_Approval_Json_SingleLine_ValidateReject.json",
+              "DocumentMoniker": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateReject.json",
+              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateReject.json",
+              "ToolTip": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateReject.json",
+              "RelativeToolTip": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateReject.json",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-19T02:52:12.673Z",
+              "WhenOpened": "2026-08-19T09:40:03.631Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Invoice_Approval_Json_SingleLine_ValidateApprove.json",
+              "DocumentMoniker": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateApprove.json",
+              "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateApprove.json",
+              "ToolTip": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateApprove.json",
+              "RelativeToolTip": "Modules\\Sales\\Invoice\\TestData\\Approval\\Invoice_Approval_Json_SingleLine_ValidateApprove.json",
+              "ViewState": "AgIAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-08-19T09:39:59.122Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{809f6ff3-8092-454a-8003-6d4091f9b5bb}"
             },
             {
               "$type": "Bookmark",
@@ -103,25 +127,16 @@
               "Name": "ST:14:0:{2456bd12-ecf7-4988-a4a6-67d49173f565}"
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{809f6ff3-8092-454a-8003-6d4091f9b5bb}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "InvoiceApprovalHandler.cs",
-              "DocumentMoniker": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
+              "DocumentMoniker": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
               "RelativeDocumentMoniker": "Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
-              "ToolTip": "D:\\Platform\\App.Automation\\Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
+              "ToolTip": "D:\\Data\\App.Automation\\Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
               "RelativeToolTip": "Modules\\Sales\\Invoice\\Approval\\InvoiceApprovalHandler.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFUAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-19T02:25:11.072Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-08-19T02:25:11.072Z"
             }
           ]
         },

@@ -56,9 +56,9 @@
   ],
 
   "Approval": {
-    "Action": "Reject",
+    "Action": "Revise",
     "ApprovalLevel": 1,
-    "Comments": "Rejected Level 1"
+    "Comments": "Revised Level 1"
   },
 
   "Expected": {
