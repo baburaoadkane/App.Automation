@@ -56,6 +56,8 @@
   ],
 
   "Approval": {
+    "WorkflowType": "SubmitForApproval",
+
     "Action": "Revise",
     "ApprovalLevel": 1,
     "Comments": "Revise Level 1"

@@ -55,7 +55,7 @@
   ],
 
   "Approval": {
-    "WorkflowType": "MultipleLevelApproval",
+    "WorkflowType": "MultiLevelApproval",
 
     "ApprovalSteps": [
       {

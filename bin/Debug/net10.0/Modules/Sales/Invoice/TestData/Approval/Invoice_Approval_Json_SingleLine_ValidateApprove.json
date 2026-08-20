@@ -32,7 +32,7 @@
     "AvoidCostingOnApproval": false,
     "InvoiceAsPerPickingOrder": false,
     "StoreTransferAsPerPickingOrder": false,
-    "EnableApprovalWorkflow": false,
+    "EnableApprovalWorkflow": true,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
   },
@@ -55,6 +55,7 @@
   ],
 
   "Approval": {
+    "WorkflowType": "SubmitForApproval",
     "Action": "Approve",
     "ApprovalLevel": 1,
     "Comments": "Approval Level 1"

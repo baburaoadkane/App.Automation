@@ -11,7 +11,7 @@ namespace App.Automation.Core.Utilities
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             ReadCommentHandling = JsonCommentHandling.Skip,
             AllowTrailingCommas = true,
-            Converters = { new CaseInsensitiveEnumConverter() }
+            Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) }
         };
 
         // ── Load a single file ─────────────────────────────────────────────────

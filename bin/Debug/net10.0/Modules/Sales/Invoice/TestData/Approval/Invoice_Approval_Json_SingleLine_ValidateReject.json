@@ -55,6 +55,8 @@
   ],
 
   "Approval": {
+    "WorkflowType": "SubmitForApproval",
+
     "Action": "Reject",
     "ApprovalLevel": 1,
     "Comments": "Rejected Level 1"

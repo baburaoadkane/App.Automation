@@ -280,15 +280,102 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
     #endregion
 
+    //#region SUBMITTED REQUEST - APPROVAL EXECUTION
+    //private void ExecuteApproval(InvoiceDM document)
+    //{
+    //    ArgumentNullException.ThrowIfNull(document);
+    //    ArgumentNullException.ThrowIfNull(document.Approval);
+
+    //    ExecuteCreate(document);
+
+    //    string documentNo = _expectationHandler.ReadDocumentNumber();
+
+    //    // ================================================================
+    //    // 2. SUBMIT FOR APPROVAL
+    //    // ================================================================
+
+    //    ExecuteStep(
+    //        "Submit Invoice for Approval",
+    //        () =>
+    //        {
+    //            _approvalHandler.Submit();
+
+    //            ValidateAfterSubmit(document);
+    //        });
+
+    //    // ================================================================
+    //    // 3. LOGOUT SUBMITTER
+    //    // ================================================================
+
+    //    ExecuteStep(
+    //        "Logout Submitter",
+    //        () =>
+    //        {
+    //            _loginHelper.Logout();
+    //            Wait.WaitForSeconds(2);
+    //        });
+
+    //    // ================================================================
+    //    // 4. LOGIN AS APPROVER
+    //    // ================================================================
+
+    //    ExecuteStep(
+    //        "Login as Approver",
+    //        () =>
+    //        {
+    //            _loginHelper.Login(
+    //                Config.ApproverUsername,
+    //                Config.ApproverPassword);
+    //        });
+
+    //    // ================================================================
+    //    // 5. OPEN NOTIFICATION → MY APPROVALS
+    //    // ================================================================
+
+    //    ExecuteStep(
+    //        "Open My Approvals",
+    //        () =>
+    //        {
+    //            _approvalNavigationHandler.ClickOnNotification();
+
+    //        });
+
+    //    // ================================================================
+    //    // 6. FIND AND OPEN TRANSACTION
+    //    // ================================================================        
+
+    //    ExecuteStep(
+    //        $"Open Approval Transaction - {documentNo}",
+    //        () =>
+    //        {
+    //            _approvalNavigationHandler
+    //                .FindAndOpenApprovalTransaction(
+    //                    documentNo);
+    //        });
+
+    //    // ================================================================
+    //    // 7. EXECUTE APPROVAL ACTION
+    //    // ================================================================
+
+    //    ExecuteSingleApproval(document);
+    //}
+    //#endregion
+
     #region SUBMITTED REQUEST - APPROVAL EXECUTION
+
     private void ExecuteApproval(InvoiceDM document)
     {
         ArgumentNullException.ThrowIfNull(document);
         ArgumentNullException.ThrowIfNull(document.Approval);
 
+        // ================================================================
+        // 1. CREATE → SAVE → VIEW
+        // ================================================================
+
         ExecuteCreate(document);
 
-        string documentNo = _expectationHandler.ReadDocumentNumber();
+        string documentNo =
+            _expectationHandler.ReadDocumentNumber();
 
         // ================================================================
         // 2. SUBMIT FOR APPROVAL
@@ -304,45 +391,118 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             });
 
         // ================================================================
-        // 3. LOGOUT SUBMITTER
+        // 3. EXECUTE APPROVAL WORKFLOW
         // ================================================================
 
-        ExecuteStep(
-            "Logout Submitter",
-            () =>
-            {
-                _loginHelper.Logout();
-                Wait.WaitForSeconds(2);
-            });
+        switch (document.Approval.WorkflowType)
+        {
+            case ApprovalWorkflowType.SubmitForApproval:
 
-        // ================================================================
-        // 4. LOGIN AS APPROVER
-        // ================================================================
+                ExecuteSingleLevelApproval(
+                    document, documentNo);
 
-        ExecuteStep(
-            "Login as Approver",
-            () =>
-            {
-                _loginHelper.Login(
-                    Config.ApproverUsername,
-                    Config.ApproverPassword);
-            });
+                break;
 
-        // ================================================================
-        // 5. OPEN NOTIFICATION → MY APPROVALS
-        // ================================================================
+            case ApprovalWorkflowType.MultiLevelApproval:
+
+                ExecuteMultiLevelApproval(
+                    document,
+                    documentNo,
+                    document.Approval.ApprovalSteps);
+
+                break;
+
+            default:
+
+                throw new ArgumentException(
+                    $"Unsupported approval workflow type: " +
+                    $"{document.Approval.WorkflowType}");
+        }
+    }
+
+    #endregion
+
+    #region SINGLE LEVEL APPROVAL WORKFLOW
+
+private void ExecuteSingleLevelApproval(
+    InvoiceDM document,
+    string documentNo)
+{
+    ArgumentNullException.ThrowIfNull(document.Approval);
+
+    int approvalLevel =
+        document.Approval.ApprovalLevel;
+
+    if (approvalLevel <= 0)
+    {
+        approvalLevel = 1;
+    }
+
+    ApprovalAction action =
+        document.Approval.Action;
+
+    if (action == ApprovalAction.None)
+    {
+        throw new ArgumentException(
+            "Approval action must be configured for " +
+            "a single-level approval scenario.");
+    }
+
+    // ================================================================
+    // LOGOUT SUBMITTER
+    // ================================================================
+
+    ExecuteStep(
+        "Logout Submitter",
+        () =>
+        {
+            _loginHelper.Logout();
+
+            Wait.WaitForSeconds(2);
+        });
+
+    // ================================================================
+    // LOGIN AS APPROVER
+    // ================================================================
+
+    ExecuteStep(
+        "Login as Approver",
+        () =>
+        {
+            _loginHelper.Login(
+                Config.ApproverUsername,
+                Config.ApproverPassword);
+        });
+
+    // ================================================================
+    // OPEN APPROVAL TRANSACTION
+    // ================================================================
+
+    OpenApprovalTransaction(documentNo);
+
+    // ================================================================
+    // EXECUTE ACTION
+    // ================================================================
+
+    ExecuteSingleApproval(document);
+}
+
+    #endregion
+
+    #region OPEN APPROVAL TRANSACTION
+
+    private void OpenApprovalTransaction(
+        string documentNo)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(documentNo);
 
         ExecuteStep(
             "Open My Approvals",
             () =>
             {
-                _approvalNavigationHandler.ClickOnNotification();
-
+                _approvalNavigationHandler
+                    .ClickOnNotification();
             });
-
-        // ================================================================
-        // 6. FIND AND OPEN TRANSACTION
-        // ================================================================        
 
         ExecuteStep(
             $"Open Approval Transaction - {documentNo}",
@@ -352,13 +512,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                     .FindAndOpenApprovalTransaction(
                         documentNo);
             });
-
-        // ================================================================
-        // 7. EXECUTE APPROVAL ACTION
-        // ================================================================
-
-        ExecuteSingleApproval(document);
     }
+
     #endregion
 
     #region SINGLE LEVEL APPROVAL EXECUTION
@@ -401,52 +556,181 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
     #endregion
 
+    //#region MULTI LEVEL APPROVAL EXECUTION
+    //private void ExecuteMultiLevelApproval(
+    //    InvoiceDM document,
+    //    List<Core.DataModels.Shared.ApprovalStepDM> approvalSteps)
+    //{
+    //    foreach (var approvalStep in
+    //             approvalSteps.OrderBy(x => x.Level))
+    //    {
+    //        if (approvalStep.Level <= 0)
+    //        {
+    //            throw new ArgumentException(
+    //                $"Invalid approval level: " +
+    //                $"{approvalStep.Level}");
+    //        }
+
+    //        if (approvalStep.Action == ApprovalAction.None)
+    //        {
+    //            throw new ArgumentException(
+    //                $"Approval action is not configured " +
+    //                $"for Level {approvalStep.Level}.");
+    //        }
+
+    //        Report.Info(
+    //            $"================================================");
+
+    //        Report.Info(
+    //            $"Approval Level: {approvalStep.Level}");
+
+    //        Report.Info(
+    //            $"Approver: {approvalStep.Approver}");
+
+    //        Report.Info(
+    //            $"Action: {approvalStep.Action}");
+
+    //        Report.Info(
+    //            $"================================================");
+
+    //        // --------------------------------------------------------
+    //        // Navigate to pending approval for this level
+    //        // --------------------------------------------------------
+
+    //        NavigateToPendingApproval(document);
+
+    //        // --------------------------------------------------------
+    //        // Execute configured action
+    //        // --------------------------------------------------------
+
+    //        ExecuteApprovalAction(
+    //            document,
+    //            approvalStep.Level,
+    //            approvalStep.Action,
+    //            approvalStep.Comments);
+
+    //        // --------------------------------------------------------
+    //        // Stop immediately if request is rejected or revised.
+    //        //
+    //        // There is no next approval level after:
+    //        //
+    //        // Reject
+    //        // Revise
+    //        //
+    //        // --------------------------------------------------------
+
+    //        if (approvalStep.Action == ApprovalAction.Reject ||
+    //            approvalStep.Action == ApprovalAction.Revise)
+    //        {
+    //            Report.Info(
+    //                $"Approval workflow ended at Level " +
+    //                $"{approvalStep.Level} with action " +
+    //                $"{approvalStep.Action}.");
+
+    //            break;
+    //        }
+    //    }
+    //}
+    //#endregion
+
     #region MULTI LEVEL APPROVAL EXECUTION
+
     private void ExecuteMultiLevelApproval(
         InvoiceDM document,
+        string documentNo,
         List<Core.DataModels.Shared.ApprovalStepDM> approvalSteps)
     {
-        foreach (var approvalStep in
-                 approvalSteps.OrderBy(x => x.Level))
+        if (approvalSteps == null ||
+            approvalSteps.Count == 0)
         {
-            if (approvalStep.Level <= 0)
-            {
-                throw new ArgumentException(
-                    $"Invalid approval level: " +
-                    $"{approvalStep.Level}");
-            }
+            throw new ArgumentException(
+                "Approval steps must be configured for " +
+                "a multi-level approval workflow.");
+        }
 
-            if (approvalStep.Action == ApprovalAction.None)
-            {
-                throw new ArgumentException(
-                    $"Approval action is not configured " +
-                    $"for Level {approvalStep.Level}.");
-            }
+        var orderedApprovalSteps =
+            approvalSteps
+                .OrderBy(x => x.Level)
+                .ToList();
+
+        // ================================================================
+        // PROCESS EACH APPROVAL LEVEL
+        // ================================================================
+
+        for (int i = 0;
+             i < orderedApprovalSteps.Count;
+             i++)
+        {
+            var approvalStep =
+                orderedApprovalSteps[i];
+
+            // ============================================================
+            // VALIDATE APPROVAL STEP
+            // ============================================================
+
+            ValidateApprovalStep(
+                approvalStep);
 
             Report.Info(
-                $"================================================");
+                "================================================");
 
             Report.Info(
-                $"Approval Level: {approvalStep.Level}");
+                $"Starting Approval Level: " +
+                $"{approvalStep.Level}");
 
             Report.Info(
-                $"Approver: {approvalStep.Approver}");
+                $"Approver: " +
+                $"{approvalStep.Approver}");
 
             Report.Info(
-                $"Action: {approvalStep.Action}");
+                $"Action: " +
+                $"{approvalStep.Action}");
 
             Report.Info(
-                $"================================================");
+                "================================================");
 
-            // --------------------------------------------------------
-            // Navigate to pending approval for this level
-            // --------------------------------------------------------
+            // ============================================================
+            // LOGOUT CURRENT USER
+            //
+            // Level 1:
+            // Submitter → Logout
+            //
+            // Level 2+:
+            // Previous Approver → Logout
+            // ============================================================
 
-            NavigateToPendingApproval(document);
+            ExecuteStep(
+                $"Logout Current User - Before Level {approvalStep.Level}",
+                () =>
+                {
+                    _loginHelper.Logout();
 
-            // --------------------------------------------------------
-            // Execute configured action
-            // --------------------------------------------------------
+                    Wait.WaitForSeconds(2);
+                });
+
+            // ============================================================
+            // LOGIN AS CURRENT LEVEL APPROVER
+            // ============================================================
+
+            ExecuteStep(
+                $"Login Approver - Level {approvalStep.Level}",
+                () =>
+                {
+                    _loginHelper.Login(
+                        approvalStep.Approver!,
+                        approvalStep.Password!);
+                });
+
+            // ============================================================
+            // OPEN APPROVAL TRANSACTION
+            // ============================================================
+
+            OpenApprovalTransaction(
+                documentNo);
+
+            // ============================================================
+            // EXECUTE APPROVAL ACTION
+            // ============================================================
 
             ExecuteApprovalAction(
                 document,
@@ -454,28 +738,65 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 approvalStep.Action,
                 approvalStep.Comments);
 
-            // --------------------------------------------------------
-            // Stop immediately if request is rejected or revised.
+            // ============================================================
+            // STOP WORKFLOW
             //
-            // There is no next approval level after:
+            // Reject → Stop
+            // Revise → Stop
             //
-            // Reject
-            // Revise
-            //
-            // --------------------------------------------------------
+            // Only Approve continues to next level.
+            // ============================================================
 
-            if (approvalStep.Action == ApprovalAction.Reject ||
-                approvalStep.Action == ApprovalAction.Revise)
+            if (approvalStep.Action ==
+                    ApprovalAction.Reject ||
+                approvalStep.Action ==
+                    ApprovalAction.Revise)
             {
                 Report.Info(
-                    $"Approval workflow ended at Level " +
-                    $"{approvalStep.Level} with action " +
-                    $"{approvalStep.Action}.");
+                    $"Multi-level approval stopped at " +
+                    $"Level {approvalStep.Level}. " +
+                    $"Action: {approvalStep.Action}");
 
                 break;
             }
+
+            Report.Info(
+                $"Approval Level {approvalStep.Level} " +
+                $"completed successfully.");
         }
     }
+
+    #endregion
+
+    #region APPROVAL STEP VALIDATION
+
+    private static void ValidateApprovalStep(
+        Core.DataModels.Shared.ApprovalStepDM approvalStep)
+    {
+        ArgumentNullException.ThrowIfNull(
+            approvalStep);
+
+        if (approvalStep.Level <= 0)
+        {
+            throw new ArgumentException(
+                "Approval level must be greater than zero.");
+        }
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(
+            approvalStep.Approver);
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(
+            approvalStep.Password);
+
+        if (approvalStep.Action ==
+            ApprovalAction.None)
+        {
+            throw new ArgumentException(
+                $"Approval action is not configured " +
+                $"for Level {approvalStep.Level}.");
+        }
+    }
+
     #endregion
 
     #region APPROVAL ACTIONS
@@ -819,5 +1140,5 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             throw;
         }
     }
-    #endregion    
+    #endregion   
 }

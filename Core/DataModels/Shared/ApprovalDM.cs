@@ -8,8 +8,7 @@ public class ApprovalDM
     /// Defines how the approval workflow should be executed.
     /// </summary>
     public ApprovalWorkflowType WorkflowType { get; set; }
-        = ApprovalWorkflowType.None;
-
+    = ApprovalWorkflowType.None;
     /// <summary>
     /// Action to be performed.
     /// Used for simple approval scenarios.
@@ -27,13 +26,7 @@ public class ApprovalDM
     /// <summary>
     /// Approver user/login.
     /// </summary>
-    public string? Approver { get; set; }
-
-    /// <summary>
-    /// Delegated approver user/login.
-    /// Used when Action = Delegate.
-    /// </summary>
-    public string? DelegatedApprover { get; set; }
+    public string? Approver { get; set; }    
 
     /// <summary>
     /// Comments entered during approval action.
