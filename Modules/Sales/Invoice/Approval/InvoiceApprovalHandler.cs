@@ -99,24 +99,6 @@ public class InvoiceApprovalHandler : BaseHandler
     }
 
     // ================================================================
-    // DELEGATE
-    //
-    // Kept as a separate capability.
-    // It is NOT part of the normal approval workflow.
-    // ================================================================
-
-    public void Delegate()
-    {
-        Report.Info("Delegating invoice approval.");
-
-        ClickOnButton("Delegate");
-
-        WaitForLoader();
-
-        Report.Info("Invoice approval delegated.");
-    }
-
-    // ================================================================
     // BUTTON
     // ================================================================
 

@@ -1,0 +1,83 @@
+{
+  "TestDescription": "Invoice_Approval_MultiLevel_ValidateReviseLevel1",
+  "ScenarioType": "Approval",
+
+  "AppPreference": {
+    "IsAllowMultiCurrencyInTxn": false,
+    "IsFinancialSegmentsEnabled": false,
+    "IsBankChargesEnabled": false,
+    "IsChequeBookEnabled": false,
+    "IsPDCChequeEnabled": false,
+    "IsPricelistEnabled": false,
+    "IsChargesEnabled": false
+  },
+
+  "TxnParameter": {
+    "ShowBarcodeOnLines": false,
+    "AllowModifyItemDescription": false,
+    "ShowWarehouseOnLines": false,
+    "AllowItemUOMModifyInTxn": false,
+    "ShowDiscountOnLines": false,
+    "AllowBonusQty": false,
+    "AllowNonInventoryItems": false,
+    "AllowPartialPayment": false,
+    "RequirePaymentMethod": false,
+    "UseMultiplePaymentMethod": false,
+    "PromptOnStockBelowMinimumLevel": false,
+    "ShowAdditionalItemInfo": false,
+    "ShowLastPurchasePrice": false,
+    "NegativeStockCheck": false,
+    "ReserveQty": false,
+    "EnableDentedStock": false,
+    "AvoidCostingOnApproval": false,
+    "InvoiceAsPerPickingOrder": false,
+    "StoreTransferAsPerPickingOrder": false,
+    "EnableApprovalWorkflow": true,
+    "SendEmailOnApproval": false,
+    "SendPaymentLinkViaEmail": false
+  },
+
+  "Header": {
+    "Customer": "C0002 | Minnah Elamin",
+    "ReferenceNum": "Approval Test",
+    "Warehouse": "Grand Prime House"
+  },
+
+  "Lines": [
+    {
+      "Barcode": "",
+      "Item": "I0002",
+      "Quantity": 1,
+      "UOM": "",
+      "UnitPrice": 100.000,
+      "ExpectedLineTotal": 100.000
+    }
+  ],
+
+  "Approval": {
+    "WorkflowType": "MultiLevelApproval",
+
+    "ApprovalSteps": [
+      {
+        "Level": 1,
+        "Approver": "habid@grand.com",
+        "Password": "123",
+        "Action": "Revise",
+        "Comments": "Revise the invoice for correction."
+      }
+    ]
+  },
+
+  "Expected": {
+    "Messages": {
+      "OnSave": "Invoice created successfully!",
+      "OnSubmit": "Workflow submitted successfully!"
+    },
+
+    "Totals": {
+      "GrossValue": 100.000,
+      "DiscountValue": 0.000,
+      "NetValue": 100.000
+    }
+  }
+}
