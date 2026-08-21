@@ -55,7 +55,7 @@
   ],
 
   "Approval": {
-    "WorkflowType": "SubmitForApproval",
+    "WorkflowType": "SingleLevelApproval",
     "ApprovalLevel": 1,
     "Action": "Revise",
     "Approver": "habid@grand.com",

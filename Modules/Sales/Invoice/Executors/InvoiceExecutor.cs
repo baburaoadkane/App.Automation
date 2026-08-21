@@ -329,7 +329,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
 
         switch (document.Approval.WorkflowType)
         {
-            case ApprovalWorkflowType.SubmitForApproval:
+            case ApprovalWorkflowType.SingleLevelApproval:
 
                 ExecuteSingleLevelApproval(
                     document, documentNo);

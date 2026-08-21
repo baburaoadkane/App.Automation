@@ -8,5 +8,7 @@ public enum ApprovalWorkflowType
 
     SubmitForApproval,
 
+    SingleLevelApproval,
+
     MultiLevelApproval
 }

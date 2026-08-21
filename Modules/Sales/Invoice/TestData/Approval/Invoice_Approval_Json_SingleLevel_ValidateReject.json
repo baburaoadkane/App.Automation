@@ -9,7 +9,7 @@
     "IsChargesEnabled": false
   },
   "Approval": {
-    "WorkflowType": "SubmitForApproval",
+    "WorkflowType": "SingleLevelApproval",
     "ApprovalLevel": 1,
     "Action": "Reject",
     "Approver": "habid@grand.com",
