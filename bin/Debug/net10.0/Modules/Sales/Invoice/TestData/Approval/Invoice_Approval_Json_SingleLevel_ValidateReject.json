@@ -9,12 +9,17 @@
     "IsChargesEnabled": false
   },
   "Approval": {
-    "WorkflowType": "SubmitForApproval",
-    "ApprovalLevel": 1,
-    "Action": "Reject",
-    "Approver": "habid@grand.com",
-    "Password": "123",
-    "Comments": "Rejected at Level 1"
+    "WorkflowType": "MultiLevelApproval",
+
+    "ApprovalSteps": [
+      {
+        "Level": 1,
+        "Action": "Reject",
+        "Approver": "habid@grand.com",
+        "Password": "123",
+        "Comments": "Rejected at Level 1"
+      }
+    ]
   },
   "Expected": {
     "Messages": {
@@ -30,7 +35,7 @@
   },
   "Header": {
     "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "SingleLevel Validate Reject",
+    "ReferenceNum": "Single Level Validate Reject",
     "Warehouse": "Grand Prime House"
   },
   "Lines": [

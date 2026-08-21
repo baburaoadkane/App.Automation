@@ -39,7 +39,7 @@
 
   "Header": {
     "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "SingleLevel Validate Approval",
+    "ReferenceNum": "Single Level Validate Approval",
     "Warehouse": "Grand Prime House"
   },
 
@@ -55,12 +55,17 @@
   ],
 
   "Approval": {
-    "WorkflowType": "SingleLevelApproval",
-    "ApprovalLevel": 1,
-    "Action": "Approve",
-    "Approver": "habid@grand.com",
-    "Password": "123",
-    "Comments": "Approval Level 1"
+    "WorkflowType": "MultiLevelApproval",
+
+    "ApprovalSteps": [
+      {
+        "Level": 1,
+        "Action": "Approve",
+        "Approver": "habid@grand.com",
+        "Password": "123",
+        "Comments": "Approval Level 1"
+      }
+    ]
   },
 
   "Expected": {

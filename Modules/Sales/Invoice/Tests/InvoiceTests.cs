@@ -17,51 +17,15 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
     TransactionType.Invoice;
 
     // ── JSON folder paths ──────────────────────────────────────────────────
-    private const string FolderPath = TestDataFolders.Sales.Invoice;    
+    private const string FolderPath = TestDataFolders.Sales.Invoice;
 
-    #region Validation Scenarios
+    #region VALIDATION SCENARIOS 
 
-    //[Test]
-    //[Category(TestCategories.Validation)]
-    //[Category(TestCategories.Smoke)]
-    public void Invoice_Validate_Smoke_CustomerRequired()
-    {
-        var data = InvoiceBuilder
-            .New()
-            .AsScenario("Validation")
-            .Build();
-
-        data.Expected = new Core.DataModels.Shared.ExpectedResultDM
-        {
-            ValidationMessage = "Currency is required."
-        };
-
-        Executor.Execute(data);
-    }
-
-    //[Test]
-    //[Category(TestCategories.Validation)]
-    //[Category(TestCategories.Smoke)]
-    public void Invoice_Validate_Smoke_WarehouseRequired()
-    {
-        var data = InvoiceBuilder
-            .New()
-            .WithCustomer("C0002 | Minnah Elamin")
-            .AsScenario("Validation")
-            .Build();
-
-        data.Expected = new Core.DataModels.Shared.ExpectedResultDM
-        {
-            ValidationMessage = "Warehouse is required."
-        };
-
-        Executor.Execute(data);
-    }    
-
-    //[Test]
-    //[TestCaseSource(nameof(ValidationScenarios))]
-    //[Category(TestCategories.Validation)]
-    public void Base_Invoice_Validate_Json_ValidateMessage(string jsonPath)
+    [Test]
+    [TestCaseSource(nameof(ValidationScenarios))]
+    [Category(TestCategories.Smoke)]
+    [Category(TestCategories.Validation)]
+    public void Base_Invoice_Validation_Json_ValidateMessage(string jsonPath)
     {
         var data = InvoiceBuilder
             .FromJson(jsonPath)
@@ -76,34 +40,17 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #endregion    
 
-    #region Create Scenarios
+    #region CREATE SCENARIOS
 
-    //[Test]
+    [Test]
+    [TestCaseSource(nameof(CreateScenarios))]
     [Category(TestCategories.Create)]
-    [Category(TestCategories.Smoke)]
-    public void Invoice_Create_Smoke_SingleLine_Successful()
+    public void Base_Invoice_Create_Json_MultiLine_ValidateTotal(string jsonPath)
     {
         var data = InvoiceBuilder
-            .New()
-            .WithCustomer("C0002 | Minnah Elamin")
-            .WithWarehouse("Grand Prime House")
-            .WithReferenceNum("Smoke Test")
-            .AddLine(
-                barcode: "",
-                item: "I0001 | Screen Protectors"
-            )
+            .FromJson(jsonPath)
             .AsScenario("Create")
             .Build();
-
-        Executor.Execute(data);
-    }
-
-    //[Test]
-    //[TestCaseSource(nameof(CreateScenarios))]
-    [Category(TestCategories.Create)]
-    public void Base_Invoice_Create_Json_MultiLine(string jsonPath)
-    {
-        var data = InvoiceBuilder.FromJson(jsonPath).Build();
 
         Report.Info($"Scenario: {data.TestDescription}");
 
@@ -112,12 +59,12 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #endregion    
 
-    #region Direct Approval Scenarios
+    #region DIRECT APPROVAL SCENARIOS
 
-    //[Test]
-    //[Category(TestCategories.Direct_Approval)]
+    [Test]
+    [Category(TestCategories.Direct_Approval)]
     [Category(TestCategories.Smoke)]
-    public void Invoice_Approve_Smoke_DirectApproval()
+    public void Base_Invoice_Approval_Smoke_ValidateApproval()
     {
         var data = InvoiceBuilder
             .New()
@@ -136,18 +83,18 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #endregion
 
-    #region Submit For Approval Scenarios
+    #region SUBMIT FOR APPROVAL SCENARIOS
 
-    //[Test]
-    //[Category(TestCategories.Submit)]
-    //[Category(TestCategories.Smoke)]
-    public void Invoice_CreateAndSubmit_SingleLine()
+    [Test]
+    [Category(TestCategories.Submit)]
+    [Category(TestCategories.Smoke)]
+    public void Base_Invoice_Submit_Smoke_ValidateSubmitForApproval()
     {
         var data = InvoiceBuilder
             .New()
             .WithCustomer("C0002 | Minnah Elamin")
             .WithWarehouse("Grand Prime House")
-            .WithReferenceNum("Smoke Test With Approval")
+            .WithReferenceNum("Smoke Test Submit For Approval")
             .AddLine(
                 barcode: "",
                 item: "I0001 | Screen Protectors"
@@ -160,32 +107,12 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #endregion
 
-    #region Approval - Scenario Driven
-
-    //[Test]
-    //[Category(TestCategories.Approval)]
-    //[Category(TestCategories.Smoke)]
-    public void Invoice_Approve_Smoke_SingleLine_Approval()
-    {
-        var data = InvoiceBuilder
-            .New()
-            .WithCustomer("C0002 | Minnah Elamin")
-            .WithWarehouse("Grand Prime House")
-            .WithReferenceNum("Smoke Test With Approval")
-            .AddLine(
-                barcode: "",
-                item: "I0001 | Screen Protectors"
-            )
-            .AsScenario("Approval")
-            .Build();
-
-        Executor.Execute(data);
-    }
+    #region APPROVAL SCENARIOS
 
     [Test]
     [TestCaseSource(nameof(ApprovalScenarios))]
     [Category(TestCategories.Approval)]
-    public void Base_Invoice_Approve_Json_Approval(string jsonPath)
+    public void Base_Invoice_Approval_Json_ValidateApproval(string jsonPath)
     {
         var data = InvoiceBuilder
             .FromJson(jsonPath)
@@ -199,7 +126,7 @@ public class InvoiceTests : BaseTransactionTest<InvoiceDM>
 
     #endregion
 
-    #region Test Case Sources
+    #region TEST CASE SOURCES
     private static IEnumerable<TestCaseData> CreateScenarios()
         => ScenarioFactory.FromFolder(
             TestDataFolders.Create(FolderPath));
