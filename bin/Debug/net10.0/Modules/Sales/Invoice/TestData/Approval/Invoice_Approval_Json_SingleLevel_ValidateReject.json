@@ -1,7 +1,4 @@
 {
-  "TestDescription": "Invoice_Reject_SingleLine_ValidateReject",
-  "ScenarioType": "Approve",
-
   "AppPreference": {
     "IsAllowMultiCurrencyInTxn": false,
     "IsFinancialSegmentsEnabled": false,
@@ -11,7 +8,43 @@
     "IsPricelistEnabled": false,
     "IsChargesEnabled": false
   },
+  "Approval": {
+    "WorkflowType": "SubmitForApproval",
+    "ApprovalLevel": 1,
+    "Action": "Reject",
+    "Approver": "habid@grand.com",
+    "Password": "123",
+    "Comments": "Rejected at Level 1"
+  },
+  "Expected": {
+    "Messages": {
+      "OnSave": "Invoice created successfully!",
+      "OnSubmit": "Workflow submitted successfully!"
+    },
 
+    "Totals": {
+      "GrossValue": 100.000,
+      "DiscountValue": 0.000,
+      "NetValue": 100.000
+    }
+  },
+  "Header": {
+    "Customer": "C0002 | Minnah Elamin",
+    "ReferenceNum": "SingleLevel Validate Reject",
+    "Warehouse": "Grand Prime House"
+  },
+  "Lines": [
+    {
+      "Barcode": "",
+      "Item": "I0002",
+      "Quantity": 1,
+      "UOM": "",
+      "UnitPrice": 100.000,
+      "ExpectedLineTotal": 100.000
+    }
+  ],
+  "ScenarioType": "Approval",
+  "TestDescription": "Invoice_Reject_SingleLine_ValidateReject",
   "TxnParameter": {
     "ShowBarcodeOnLines": false,
     "AllowModifyItemDescription": false,
@@ -35,43 +68,5 @@
     "EnableApprovalWorkflow": false,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
-  },
-
-  "Header": {
-    "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "Approval Test",
-    "Warehouse": "Grand Prime House"
-  },
-
-  "Lines": [
-    {
-      "Barcode": "",
-      "Item": "I0002",
-      "Quantity": 1,
-      "UOM": "",
-      "UnitPrice": 100.000,
-      "ExpectedLineTotal": 100.000
-    }
-  ],
-
-  "Approval": {
-    "WorkflowType": "SubmitForApproval",
-
-    "Action": "Reject",
-    "ApprovalLevel": 1,
-    "Comments": "Rejected Level 1"
-  },
-
-  "Expected": {
-    "Messages": {
-      "OnSave": "Invoice created successfully!",
-      "OnSubmit": "Workflow submitted successfully!"
-    },
-
-    "Totals": {
-      "GrossValue": 100.000,
-      "DiscountValue": 0.000,
-      "NetValue": 100.000
-    }
   }
 }

@@ -26,7 +26,12 @@ public class ApprovalDM
     /// <summary>
     /// Approver user/login.
     /// </summary>
-    public string? Approver { get; set; }    
+    public string? Approver { get; set; }
+
+    /// <summary>
+    /// Approver password.
+    /// </summary>
+    public string? Password { get; set; }
 
     /// <summary>
     /// Comments entered during approval action.

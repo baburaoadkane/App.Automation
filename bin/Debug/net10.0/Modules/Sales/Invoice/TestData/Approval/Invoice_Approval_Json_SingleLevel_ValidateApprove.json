@@ -32,14 +32,14 @@
     "AvoidCostingOnApproval": false,
     "InvoiceAsPerPickingOrder": false,
     "StoreTransferAsPerPickingOrder": false,
-    "EnableApprovalWorkflow": true,
+    "EnableApprovalWorkflow": false,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
   },
 
   "Header": {
     "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "Approval Test",
+    "ReferenceNum": "SingleLevel Validate Approval",
     "Warehouse": "Grand Prime House"
   },
 
@@ -56,8 +56,10 @@
 
   "Approval": {
     "WorkflowType": "SubmitForApproval",
-    "Action": "Approve",
     "ApprovalLevel": 1,
+    "Action": "Approve",
+    "Approver": "habid@grand.com",
+    "Password": "123",
     "Comments": "Approval Level 1"
   },
 

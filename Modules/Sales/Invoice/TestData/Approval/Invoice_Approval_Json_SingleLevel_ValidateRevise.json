@@ -1,7 +1,6 @@
 {
   "TestDescription": "Invoice_Revise_SingleLine_ValidateRevise",
   "ScenarioType": "Approval",
-  "RequiresApproval": true,
 
   "AppPreference": {
     "IsAllowMultiCurrencyInTxn": false,
@@ -33,14 +32,14 @@
     "AvoidCostingOnApproval": false,
     "InvoiceAsPerPickingOrder": false,
     "StoreTransferAsPerPickingOrder": false,
-    "EnableApprovalWorkflow": true,
+    "EnableApprovalWorkflow": false,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
   },
 
   "Header": {
     "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "Approval Test",
+    "ReferenceNum": "SingleLevel Validate Revise",
     "Warehouse": "Grand Prime House"
   },
 
@@ -57,10 +56,11 @@
 
   "Approval": {
     "WorkflowType": "SubmitForApproval",
-
-    "Action": "Revise",
     "ApprovalLevel": 1,
-    "Comments": "Revise Level 1"
+    "Action": "Revise",
+    "Approver": "habid@grand.com",
+    "Password": "123",
+    "Comments": "Revise at Level 1"
   },
 
   "Expected": {

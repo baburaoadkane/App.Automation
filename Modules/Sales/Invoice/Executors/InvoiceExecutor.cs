@@ -7,6 +7,7 @@ using App.Automation.Modules.Global.Validators;
 using App.Automation.Modules.Sales.Invoice.Approval;
 using App.Automation.Modules.Sales.Invoice.Configuration;
 using App.Automation.Modules.Sales.Invoice.DataModels;
+using App.Automation.Core.DataModels.Shared;
 using App.Automation.Modules.Sales.Invoice.HeaderHandlers;
 using App.Automation.Modules.Sales.Invoice.LineHandlers;
 using App.Automation.Modules.Sales.Invoice.Validators;
@@ -380,6 +381,12 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 "a single-level approval scenario.");
         }
 
+        ArgumentException.ThrowIfNullOrWhiteSpace(
+        document.Approval.Approver);
+
+        ArgumentException.ThrowIfNullOrWhiteSpace(
+            document.Approval.Password);
+
         // ================================================================
         // LOGOUT SUBMITTER
         // ================================================================
@@ -402,8 +409,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             () =>
             {
                 _loginHelper.Login(
-                    Config.ApproverUsername,
-                    Config.ApproverPassword);
+                    document.Approval.Approver!,
+                    document.Approval.Password!);
             });
 
         // ================================================================
@@ -483,7 +490,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             document,
             approvalLevel,
             action,
-            document.Approval.Comments);
+            document.Approval.Comments,
+            isFinalApprovalLevel: true);
     }
 
     #endregion
@@ -493,15 +501,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     private void ExecuteMultiLevelApproval(
         InvoiceDM document,
         string documentNo,
-        List<Core.DataModels.Shared.ApprovalStepDM> approvalSteps)
+        List<ApprovalStepDM> approvalSteps)
     {
-        if (approvalSteps == null ||
-            approvalSteps.Count == 0)
-        {
-            throw new ArgumentException(
-                "Approval steps must be configured for " +
-                "a multi-level approval workflow.");
-        }
+        ValidateApprovalSteps(approvalSteps);
 
         var orderedApprovalSteps =
             approvalSteps
@@ -518,14 +520,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         {
             var approvalStep =
                 orderedApprovalSteps[i];
-
-            // ============================================================
-            // VALIDATE APPROVAL STEP
-            // ============================================================
-
-            ValidateApprovalStep(
-                approvalStep);
-
+            
             Report.Info(
                 "================================================");
 
@@ -560,7 +555,9 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                 {
                     _loginHelper.Logout();
 
-                    Wait.WaitForSeconds(2);
+                    WaitForPageLoad();
+
+                    Wait.WaitForSeconds(3);
                 });
 
             // ============================================================
@@ -587,11 +584,15 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             // EXECUTE APPROVAL ACTION
             // ============================================================
 
+            bool isFinalApprovalLevel =
+                i == orderedApprovalSteps.Count - 1;
+
             ExecuteApprovalAction(
                 document,
                 approvalStep.Level,
                 approvalStep.Action,
-                approvalStep.Comments);
+                approvalStep.Comments,
+                isFinalApprovalLevel);
 
             // ============================================================
             // STOP WORKFLOW
@@ -626,7 +627,7 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
     #region APPROVAL STEP VALIDATION
 
     private static void ValidateApprovalStep(
-        Core.DataModels.Shared.ApprovalStepDM approvalStep)
+        ApprovalStepDM approvalStep)
     {
         ArgumentNullException.ThrowIfNull(
             approvalStep);
@@ -643,12 +644,64 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         ArgumentException.ThrowIfNullOrWhiteSpace(
             approvalStep.Password);
 
-        if (approvalStep.Action ==
-            ApprovalAction.None)
+        if (approvalStep.Action != ApprovalAction.Approve &&
+        approvalStep.Action != ApprovalAction.Reject &&
+        approvalStep.Action != ApprovalAction.Revise)
         {
             throw new ArgumentException(
-                $"Approval action is not configured " +
-                $"for Level {approvalStep.Level}.");
+                $"Unsupported approval action " +
+                $"'{approvalStep.Action}' for Level " +
+                $"{approvalStep.Level}. " +
+                "Only Approve, Reject, and Revise are supported.");
+        }
+    }
+
+    #endregion
+
+    #region APPROVAL WORKFLOW VALIDATION
+
+    private static void ValidateApprovalSteps(
+        List<ApprovalStepDM> approvalSteps)
+    {
+        if (approvalSteps == null ||
+            approvalSteps.Count == 0)
+        {
+            throw new ArgumentException(
+                "Approval steps must be configured for " +
+                "a multi-level approval workflow.");
+        }
+
+        var orderedSteps = approvalSteps
+            .OrderBy(x => x.Level)
+            .ToList();
+
+        // ================================================================
+        // VALIDATE FIRST LEVEL
+        // ================================================================
+
+        if (orderedSteps[0].Level != 1)
+        {
+            throw new ArgumentException(
+                "Multi-level approval must start from Level 1.");
+        }
+
+        // ================================================================
+        // VALIDATE SEQUENTIAL LEVELS
+        // ================================================================
+
+        for (int i = 0; i < orderedSteps.Count; i++)
+        {
+            int expectedLevel = i + 1;
+
+            if (orderedSteps[i].Level != expectedLevel)
+            {
+                throw new ArgumentException(
+                    $"Invalid approval level sequence. " +
+                    $"Expected Level {expectedLevel}, " +
+                    $"but found Level {orderedSteps[i].Level}.");
+            }
+
+            ValidateApprovalStep(orderedSteps[i]);
         }
     }
 
@@ -659,7 +712,8 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
         InvoiceDM document,
         int approvalLevel,
         ApprovalAction action,
-        string? comments = null)
+        string? comments = null,
+        bool isFinalApprovalLevel = false)
     {
         switch (action)
         {
@@ -671,7 +725,17 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
                     {
                         _approvalHandler.Approve(comments);
 
-                        ValidateAfterApprove(document);
+                        if (isFinalApprovalLevel)
+                        {
+                            ValidateAfterApprove(document);
+                        }
+                        else
+                        {
+                            Report.Info(
+                                $"Level {approvalLevel} approved successfully. " +
+                                "Final approval validation will be performed " +
+                                "after the last approval level.");
+                        }
                     });
 
                 break;
@@ -938,5 +1002,6 @@ public class InvoiceExecutor : BaseExecutor<InvoiceDM>
             throw;
         }
     }
-    #endregion   
+    #endregion 
+
 }

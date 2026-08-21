@@ -32,14 +32,14 @@
     "AvoidCostingOnApproval": false,
     "InvoiceAsPerPickingOrder": false,
     "StoreTransferAsPerPickingOrder": false,
-    "EnableApprovalWorkflow": true,
+    "EnableApprovalWorkflow": false,
     "SendEmailOnApproval": false,
     "SendPaymentLinkViaEmail": false
   },
 
   "Header": {
     "Customer": "C0002 | Minnah Elamin",
-    "ReferenceNum": "Approval Test",
+    "ReferenceNum": "MultiLevel Validate Reject Level 2",
     "Warehouse": "Grand Prime House"
   },
 
